@@ -9,6 +9,7 @@ namespace MyCommunity.DataAccess
     public interface IUnitOfWork
     {
         UsersRepository UsersRepository { get; }
+        CommunityRepository CommunitiesRepository { get; }
         void Save();
     }
 }

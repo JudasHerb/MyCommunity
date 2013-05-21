@@ -15,7 +15,7 @@ namespace MyCommunity.Models
         public int CommunityID { get; set; }
 
         public string Name { get; set; }
-    
-    
+
+        public virtual ICollection<UserProfile> Members { get; set; }
     }
 }

@@ -1,7 +1,3 @@
-using MyCommunity.DataAccess;
-using MyCommunity.Models;
-using WebMatrix.WebData;
-
 namespace MyCommunity.Migrations
 {
     using System;
@@ -9,7 +5,7 @@ namespace MyCommunity.Migrations
     using System.Data.Entity.Migrations;
     using System.Linq;
 
-    internal sealed class Configuration : DbMigrationsConfiguration<UnitOfWork>
+    internal sealed class Configuration : DbMigrationsConfiguration<MyCommunity.DataAccess.UnitOfWork>
     {
         public Configuration()
         {
@@ -17,15 +13,8 @@ namespace MyCommunity.Migrations
             AutomaticMigrationDataLossAllowed = true;
         }
 
-        protected override void Seed(UnitOfWork context)
+        protected override void Seed(MyCommunity.DataAccess.UnitOfWork context)
         {
-            Database.SetInitializer<UnitOfWork>(null);
-
-            WebSecurity.InitializeDatabaseConnection("DefaultConnection", "UserProfile", "UserId", "UserName", autoCreateTables: true);
-
-            context.Communities.AddOrUpdate(
-                c=>c.Name,new Community{Name="Patcham"}
-                );
             //  This method will be called after migrating to the latest version.
 
             //  You can use the DbSet<T>.AddOrUpdate() helper extension method 

@@ -9,7 +9,7 @@ using DotNetOpenAuth.AspNet;
 using Microsoft.Web.WebPages.OAuth;
 using MyCommunity.DataAccess;
 using WebMatrix.WebData;
-using MyCommunity.Filters;
+//using MyCommunity.Filters;
 using MyCommunity.Models;
 
 namespace MyCommunity.Controllers

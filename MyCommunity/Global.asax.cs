@@ -6,6 +6,8 @@ using System.Web.Http;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
+using Castle.Windsor;
+using Castle.Windsor.Installer;
 
 namespace MyCommunity
 {
@@ -14,6 +16,8 @@ namespace MyCommunity
 
     public class MvcApplication : System.Web.HttpApplication
     {
+        public static IWindsorContainer _container;
+
         protected void Application_Start()
         {
             AreaRegistration.RegisterAllAreas();
@@ -23,6 +27,17 @@ namespace MyCommunity
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             AuthConfig.RegisterAuth();
+
+            Windsor();
+        }
+        protected void Application_End()
+        {
+            _container.Dispose();
+        }
+
+        private void Windsor()
+        {
+            _container = new WindsorContainer().Install(FromAssembly.This());
         }
     }
 }

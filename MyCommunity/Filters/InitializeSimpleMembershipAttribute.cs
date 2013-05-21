@@ -3,6 +3,7 @@ using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using System.Threading;
 using System.Web.Mvc;
+using MyCommunity.DataAccess;
 using WebMatrix.WebData;
 using MyCommunity.Models;
 
@@ -25,11 +26,11 @@ namespace MyCommunity.Filters
         {
             public SimpleMembershipInitializer()
             {
-                Database.SetInitializer<UsersContext>(null);
+                Database.SetInitializer<UnitOfWork>(null);
 
                 try
                 {
-                    using (var context = new UsersContext())
+                    using (var context = new UnitOfWork())
                     {
                         if (!context.Database.Exists())
                         {

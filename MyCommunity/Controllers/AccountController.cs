@@ -7,6 +7,7 @@ using System.Web.Mvc;
 using System.Web.Security;
 using DotNetOpenAuth.AspNet;
 using Microsoft.Web.WebPages.OAuth;
+using MyCommunity.DataAccess;
 using WebMatrix.WebData;
 using MyCommunity.Filters;
 using MyCommunity.Models;
@@ -263,7 +264,7 @@ namespace MyCommunity.Controllers
             if (ModelState.IsValid)
             {
                 // Insert a new user into the database
-                using (UsersContext db = new UsersContext())
+                using (UnitOfWork db = new UnitOfWork())
                 {
                     UserProfile user = db.UserProfiles.FirstOrDefault(u => u.UserName.ToLower() == model.UserName.ToLower());
                     // Check if user already exists

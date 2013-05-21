@@ -8,16 +8,6 @@ using System.Web.Security;
 
 namespace MyCommunity.Models
 {
-    public class UsersContext : DbContext
-    {
-        public UsersContext()
-            : base("DefaultConnection")
-        {
-        }
-
-        public DbSet<UserProfile> UserProfiles { get; set; }
-    }
-
     [Table("UserProfile")]
     public class UserProfile
     {
@@ -25,6 +15,7 @@ namespace MyCommunity.Models
         [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
         public int UserId { get; set; }
         public string UserName { get; set; }
+        public int Age { get; set; }
     }
 
     public class RegisterExternalLoginModel

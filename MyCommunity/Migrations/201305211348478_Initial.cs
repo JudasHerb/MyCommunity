@@ -7,6 +7,7 @@ namespace MyCommunity.Migrations
     {
         public override void Up()
         {
+            DropColumn("UserProfile","Description");
         }
         
         public override void Down()

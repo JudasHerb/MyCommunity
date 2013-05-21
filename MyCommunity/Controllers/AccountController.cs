@@ -15,7 +15,7 @@ using MyCommunity.Models;
 namespace MyCommunity.Controllers
 {
     [Authorize]
-    [InitializeSimpleMembership]
+    //[InitializeSimpleMembership]
     public class AccountController : Controller
     {
         //

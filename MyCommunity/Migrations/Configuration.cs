@@ -1,5 +1,6 @@
 using MyCommunity.DataAccess;
 using MyCommunity.Models;
+using WebMatrix.WebData;
 
 namespace MyCommunity.Migrations
 {
@@ -18,6 +19,10 @@ namespace MyCommunity.Migrations
 
         protected override void Seed(UnitOfWork context)
         {
+            Database.SetInitializer<UnitOfWork>(null);
+
+            WebSecurity.InitializeDatabaseConnection("DefaultConnection", "UserProfile", "UserId", "UserName", autoCreateTables: true);
+
             context.Communities.AddOrUpdate(
                 c=>c.Name,new Community{Name="Patcham"}
                 );

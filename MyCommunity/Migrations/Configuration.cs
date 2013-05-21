@@ -1,4 +1,5 @@
 using MyCommunity.DataAccess;
+using MyCommunity.Models;
 using WebMatrix.WebData;
 
 namespace MyCommunity.Migrations
@@ -26,6 +27,7 @@ namespace MyCommunity.Migrations
                                                          "UserName",
                                                          autoCreateTables: true);
             }
+            context.Communities.AddOrUpdate(c=>c.Name, new Community{Name="Patcham"});
             //  This method will be called after migrating to the latest version.
 
             //  You can use the DbSet<T>.AddOrUpdate() helper extension method 

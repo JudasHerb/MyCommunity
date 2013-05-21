@@ -1,3 +1,6 @@
+using MyCommunity.DataAccess;
+using WebMatrix.WebData;
+
 namespace MyCommunity.Migrations
 {
     using System;
@@ -15,6 +18,14 @@ namespace MyCommunity.Migrations
 
         protected override void Seed(MyCommunity.DataAccess.UnitOfWork context)
         {
+            if (!WebSecurity.Initialized)
+            {
+                WebSecurity.InitializeDatabaseConnection("DefaultConnection",
+                                                         "UserProfile",
+                                                         "UserId",
+                                                         "UserName",
+                                                         autoCreateTables: true);
+            }
             //  This method will be called after migrating to the latest version.
 
             //  You can use the DbSet<T>.AddOrUpdate() helper extension method 
@@ -28,5 +39,6 @@ namespace MyCommunity.Migrations
             //    );
             //
         }
+ 
     }
 }

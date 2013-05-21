@@ -7,6 +7,7 @@ using System.Web;
 using System.Web.Security;
 using MyCommunity.DataAccess.Repositories;
 //using MyCommunity.Migrations;
+using MyCommunity.Migrations;
 using MyCommunity.Models;
 
 namespace MyCommunity.DataAccess
@@ -26,7 +27,7 @@ namespace MyCommunity.DataAccess
         #region IUnitOfWork Members
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
-            //Database.SetInitializer(new MigrateDatabaseToLatestVersion<UnitOfWork, Configuration>());
+            Database.SetInitializer(new MigrateDatabaseToLatestVersion<UnitOfWork, Configuration>());
         }
         public void Save()
         {

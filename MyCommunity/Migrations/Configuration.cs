@@ -19,6 +19,8 @@ namespace MyCommunity.Migrations
 
         protected override void Seed(MyCommunity.DataAccess.UnitOfWork context)
         {
+            context.Communities.AddOrUpdate(c => c.Name, new Community { Name = "Patcham" });
+
             if (!WebSecurity.Initialized)
             {
                 WebSecurity.InitializeDatabaseConnection("DefaultConnection",
@@ -26,20 +28,24 @@ namespace MyCommunity.Migrations
                                                          "UserId",
                                                          "UserName",
                                                          autoCreateTables: true);
-            }
-            context.Communities.AddOrUpdate(c=>c.Name, new Community{Name="Patcham"});
-            //  This method will be called after migrating to the latest version.
 
-            //  You can use the DbSet<T>.AddOrUpdate() helper extension method 
-            //  to avoid creating duplicate seed data. E.g.
-            //
-            //    context.People.AddOrUpdate(
-            //      p => p.FullName,
-            //      new Person { FullName = "Andrew Peters" },
-            //      new Person { FullName = "Brice Lambson" },
-            //      new Person { FullName = "Rowan Miller" }
-            //    );
-            //
+                var community = context.CommunitiesRepository.FindBy(c => c.Name == "Patcham").First();
+
+                if (!WebSecurity.UserExists("JudasHerb"))
+                {
+                    WebSecurity.CreateUserAndAccount("JudasHerb", "B0110cks!", new {Community=community});
+                }
+                else
+                {
+                    var judas = context.UsersRepository.FindBy(m => m.UserName == "JudasHerb").First();
+                    if (judas.Community == null)
+                    {
+                        judas.Community = community;
+                        context.UsersRepository.Update(judas);
+                    }
+                }
+            }
+
         }
  
     }

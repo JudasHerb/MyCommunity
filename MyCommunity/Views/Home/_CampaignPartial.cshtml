@@ -1,0 +1,9 @@
+﻿@model MyCommunity.ViewModels.PartialCampaignViewModel
+<p>Campaigns</p>
+<ul>
+    @foreach (var campaign in Model.Campaigns)
+    {
+        <li>@Html.ActionLink(campaign.Value, "Campaign", new {id=campaign.Key})</li>
+    }
+</ul>
+@Html.ActionLink("+ New Campaign", "Campaign")

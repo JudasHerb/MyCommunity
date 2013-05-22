@@ -25,10 +25,7 @@ namespace MyCommunity.DataAccess
         public DbSet<Community> Communities { get; set; }
 
         #region IUnitOfWork Members
-        protected override void OnModelCreating(DbModelBuilder modelBuilder)
-        {
-            Database.SetInitializer(new MigrateDatabaseToLatestVersion<UnitOfWork, Configuration>());
-        }
+  
         public void Save()
         {
             SaveChanges();

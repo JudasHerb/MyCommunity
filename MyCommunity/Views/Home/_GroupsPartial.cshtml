@@ -1,0 +1,12 @@
+﻿@model MyCommunity.ViewModels.PartialGroupsViewModel
+
+
+<p>Groups</p>
+<ul>
+    @foreach (var group in Model.Groups)
+    {
+        <li>@Html.ActionLink(group.Value, "Group", new {id=group.Key})</li>
+    }
+</ul>
+@Html.ActionLink("+ New Group", "Group")
+

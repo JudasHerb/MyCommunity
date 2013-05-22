@@ -9,13 +9,15 @@ using System.Web.Security;
 namespace MyCommunity.Models
 {
     [Table("UserProfile")]
-    public class UserProfile
+    public class UserProfile : IMessagable
     {
         [Key]
         [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
         public int UserId { get; set; }
         public string UserName { get; set; }
-        public virtual ICollection<Community> Communities { get; set; }
+        public virtual Community Community { get; set; }
+
+        public virtual ICollection<Message> Messages { get; set; }
         
     }
 

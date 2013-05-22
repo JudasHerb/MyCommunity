@@ -4,6 +4,9 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using MyCommunity.DataAccess;
+using MyCommunity.Models;
+using MyCommunity.ViewModels;
+using WebMatrix.WebData;
 
 namespace MyCommunity.Controllers
 {
@@ -15,15 +18,18 @@ namespace MyCommunity.Controllers
         {
             _unitOfWork = unitOfWork;
         }
-
+        
         public ActionResult Index()
         {
-            var communities = _unitOfWork.CommunitiesRepository.GetAll();
-            ViewBag.Message = string.Format("Modify this template to kick-start your ASP.NET MVC application. {0}", communities.Count().ToString());
-
-            return View();
+            var user = _unitOfWork.UsersRepository.FindBy(u => u.UserName == WebSecurity.CurrentUserName).First();
+            var groups = user.Community.Groups.Where(g => g.Members.Contains(user)).ToList();
+            var campaigns = user.Community.Campaigns.Where(c => c.Members.Contains(user)).ToList();
+            
+            return View(new IndexViewModel(user.Community, groups, campaigns));
         }
 
+
+        [AllowAnonymous]
         public ActionResult About()
         {
             ViewBag.Message = "Your app description page.";
@@ -31,6 +37,7 @@ namespace MyCommunity.Controllers
             return View();
         }
 
+        [AllowAnonymous]
         public ActionResult Contact()
         {
             ViewBag.Message = "Your contact page.";

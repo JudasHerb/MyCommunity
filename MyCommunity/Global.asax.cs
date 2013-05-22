@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Web;
 using System.Web.Http;
@@ -8,6 +9,8 @@ using System.Web.Optimization;
 using System.Web.Routing;
 using Castle.Windsor;
 using Castle.Windsor.Installer;
+using MyCommunity.DataAccess;
+using Configuration = MyCommunity.Migrations.Configuration;
 
 namespace MyCommunity
 {
@@ -20,6 +23,13 @@ namespace MyCommunity
 
         protected void Application_Start()
         {
+            Database.SetInitializer(new MigrateDatabaseToLatestVersion<UnitOfWork, Configuration>());
+
+            using (var unitOfWork = new UnitOfWork())
+            {
+                var results = unitOfWork.Communities.FirstOrDefault();
+            }
+
             AreaRegistration.RegisterAllAreas();
 
             WebApiConfig.Register(GlobalConfiguration.Configuration);

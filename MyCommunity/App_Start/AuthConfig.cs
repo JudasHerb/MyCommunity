@@ -26,7 +26,7 @@ namespace MyCommunity
             //    appId: "",
             //    appSecret: "");
 
-            OAuthWebSecurity.RegisterGoogleClient();
+           // OAuthWebSecurity.RegisterGoogleClient();
         }
     }
 }

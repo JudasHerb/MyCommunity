@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
@@ -9,6 +10,12 @@ namespace MyCommunity.Models
 {
     public class Groups : IMessagable, IMermberful
     {
+        public Groups()
+        {
+            Members = new Collection<UserProfile>();
+            Messages = new Collection<Message>();
+        }
+
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int GroupID { get; set; }

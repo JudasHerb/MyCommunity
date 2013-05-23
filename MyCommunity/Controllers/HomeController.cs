@@ -44,5 +44,29 @@ namespace MyCommunity.Controllers
 
             return View();
         }
+
+        public ActionResult CreateGroupPartial()
+        {
+            return PartialView("_CreateGroupPartial");
+        }
+        [HttpPost]
+        public ActionResult CreateGroup(CreateGroupViewModel group)
+        {
+            var returnMessage = string.Empty;
+            if (ModelState.IsValid)
+            {
+                var user = _unitOfWork.UsersRepository.FindBy(u => u.UserName == WebSecurity.CurrentUserName).First();
+                var newGroup = new Groups {Description = group.Description, IsPublic = group.IsPublic, Name = group.Name};
+                newGroup.Members.Add(user);
+                user.Community.Groups.Add(newGroup);
+                _unitOfWork.CommunitiesRepository.Update(user.Community);
+                _unitOfWork.Save();
+            }
+            else
+            {
+                returnMessage = "Need to fill in all data";
+            }
+            return Json(returnMessage);
+        }
     }
 }

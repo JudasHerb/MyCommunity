@@ -18,8 +18,7 @@ namespace MyCommunity.App_Start.Installers
             var mvcControllerFactory = new WindsorControllerFactory(container.Kernel);
             ControllerBuilder.Current.SetControllerFactory(mvcControllerFactory);
 
-            container.Register(
-                AllTypes.FromThisAssembly().BasedOn<IController>().Configure(c => c.LifestyleTransient()));
+            container.Register(Classes.FromThisAssembly().BasedOn<IController>().Configure(c => c.LifestyleTransient()));
         }
 
         #endregion

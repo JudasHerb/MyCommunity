@@ -22,7 +22,7 @@ namespace MyCommunity.ViewModels
             {
                 Groups.Add(group.GroupID, group.Name);
             }
-            Comments = community.Messages.ToList();
+            Comments = community.Messages.OrderByDescending(m=>m.MessageID).Take(5).ToList();
         }
 
         public string CommunityName { get; set; }

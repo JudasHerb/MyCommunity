@@ -16,7 +16,7 @@ namespace MyCommunity.DataAccess
     {
         private UsersRepository _usersRepository;
         private CommunityRepository _communtiesRepository;
-        private GroupRepository _groupRepository;
+        
         public UnitOfWork()
             : base("DefaultConnection")
         {
@@ -24,7 +24,7 @@ namespace MyCommunity.DataAccess
 
         public DbSet<UserProfile> UserProfiles { get; set; }
         public DbSet<Community> Communities { get; set; }
-        public DbSet<Groups> Groups { get; set; }
+        
 
         #region IUnitOfWork Members
   
@@ -42,10 +42,7 @@ namespace MyCommunity.DataAccess
         {
             get { return _communtiesRepository ?? (_communtiesRepository = new CommunityRepository(this)); }
         }
-        public GroupRepository GroupRepository
-        {
-            get { return _groupRepository ?? (_groupRepository = new GroupRepository(this)); }
-        }
+
         
         #endregion
     }

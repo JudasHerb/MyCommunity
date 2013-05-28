@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Web.Security;
 using MyCommunity.Models;
 
 namespace MyCommunity.DataAccess.Repositories
@@ -13,5 +14,10 @@ namespace MyCommunity.DataAccess.Repositories
         {
         }
 
+        public UserProfile CurrentUser()
+        {
+            var user = Membership.GetUser();
+            return FindBy(u => u.UserName == user.UserName).First();
+        }
     }
 }

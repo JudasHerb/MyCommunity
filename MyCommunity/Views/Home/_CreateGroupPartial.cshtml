@@ -12,11 +12,13 @@
             url: "/Home/CreateGroup",
             data: { "name": name, "description":description },
             success: function (data) {
-                if (data.length == 0) {
+                
+                if (data.state == "Success") {
                     $("#newGroupPopup").dialog("close");
+                    $(location).attr("href", data.additional);
                 }
                 else {
-                    alert(data);
+                    alert(data.additional);
                 }
             },
             error: function(data) {

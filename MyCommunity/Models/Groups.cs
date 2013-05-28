@@ -8,21 +8,30 @@ using System.Web;
 
 namespace MyCommunity.Models
 {
-    public class Groups : IMessagable, IMermberful
+    public class Groups
     {
         public Groups()
         {
             Members = new Collection<UserProfile>();
+            Events = new Collection<Events>();
             Messages = new Collection<Message>();
         }
 
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int GroupID { get; set; }
-        public virtual ICollection<UserProfile> Members { get; set; }
-        public virtual ICollection<Message> Messages { get; set; }
+
+        [Required]
         public string Name { get; set; }
+
         public string Description { get; set; }
-        public Boolean IsPublic { get; set; }
+
+        public bool IsPublic { get; set; }
+
+        public virtual ICollection<UserProfile> Members { get; set; }
+
+        public virtual ICollection<Events> Events { get; set; }
+
+        public virtual ICollection<Message> Messages { get; set; }
     }
 }

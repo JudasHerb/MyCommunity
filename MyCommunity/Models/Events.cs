@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
@@ -7,8 +8,14 @@ using System.Web;
 
 namespace MyCommunity.Models
 {
-    public class Events : IMessagable, IMermberful
+    public class Events 
     {
+        public Events()
+        {
+            Messages = new Collection<Message>();
+            Members = new Collection<UserProfile>();
+        }
+
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int EventID { get; set; }

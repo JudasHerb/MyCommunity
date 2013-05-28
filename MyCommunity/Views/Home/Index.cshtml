@@ -1,15 +1,94 @@
 ﻿@model MyCommunity.ViewModels.IndexViewModel
 
+<script>
+    $(function () {
+        $("#newGroupPopup").dialog({
+            autoOpen: false,
+            open: function (event, ui) {
+                $(this).load("@Url.Action("CreateGroupPartial")");
+            }
+        });
+        $("#newGroupButton").button().click(function () {
+            $("#newGroupPopup").dialog("open");
+        });
+    });
+        $('#submitComment').live("click", function (event) {
+            var comment = $("#comment").val();
+            $.ajax({
+                url: "/Home/Comment",
+                type: "POST",
+                data: { "comment": comment },
+                success: function (data) {
+                    if (data.state == "Success") {
+                        $('#comments').prepend('<p>' + data.additional + '</p>');
+                    }
+                    else {
+                        alert(data.additional);
+                    }
+                },
+                error: function (data) {
+                    alert('Oops. Something wnet wrong!');
+                }
+            });
+            return false;
+        });
+</script>
+
 @{
-    ViewBag.Title = "Home Page";
+    ViewBag.Title = @Model.CommunityName;
 }
 
 <div id="menu">
-                    @Html.Partial("_MenuPartial")
-                    @Html.Partial("_GroupsPartial",Model.Groups)
-                    @Html.Partial("_CampaignPartial", Model.Campaigns)
-                </div>
-                <div id="homeBody"><h2>@Model.CommunityName</h2>
-<p>yada yada</p></div>
+    <p>@Html.ActionLink("My Home", "Index")</p>
+    <p>@Html.ActionLink("My Messages", "Index")</p>
+    <p>@Html.ActionLink("Upcoming Events", "Index")</p>
+
+    <p>My Groups</p>
+
+    <ul>
+        @foreach (var group in Model.Groups)
+        {
+            <li>@Html.ActionLink(group.Value, "Group", new { id = group.Key })</li>
+        }
+    </ul>
+    <button id="newGroupButton">Create Group</button>
+    <div id="newGroupPopup" title="Dialog Title"></div>
+
+
+    <p>My Campaigns</p>
+    <ul>
+        @foreach (var campaign in Model.Campaigns)
+        {
+            <li>@Html.ActionLink(campaign.Value, "Campaign", new { id = campaign.Key })</li>
+        }
+    </ul>
+
+
+</div>
+<div id="homeBody">
+    @using (Html.BeginForm("Comment", "Home"))
+    {
+        @Html.AntiForgeryToken()
+
+        <fieldset>
+            <legend>Post:</legend>
+            <ol>
+                <li>
+                    <label>Comment</label>
+                    <input type="text" name="comment " id="comment" />
+                </li>
+            </ol>
+            <input id="submitComment" type="submit" value="Post" />
+        </fieldset>
+    }
+    <div id="comments">
+        @foreach (var comment in Model.Comments)
+        {
+            <p>
+                @comment.Content
+            </p>
+        }
+    </div>
+</div>
 
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity;
@@ -9,8 +10,15 @@ using System.Web.Security;
 namespace MyCommunity.Models
 {
     [Table("UserProfile")]
-    public class UserProfile : IMessagable
+    public class UserProfile 
     {
+        public UserProfile()
+        {
+            Messages = new Collection<Message>();
+            Groups = new Collection<Groups>();
+            Campaigns = new Collection<Campaigns>();
+        }
+
         [Key]
         [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
         public int UserId { get; set; }
@@ -18,6 +26,8 @@ namespace MyCommunity.Models
         public virtual Community Community { get; set; }
 
         public virtual ICollection<Message> Messages { get; set; }
+        public virtual ICollection<Groups> Groups { get; set; }
+        public virtual ICollection<Campaigns> Campaigns { get; set; }
         
     }
 

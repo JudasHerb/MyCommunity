@@ -10,7 +10,7 @@ namespace MyCommunity.DataAccess
     {
         UsersRepository UsersRepository { get; }
         CommunityRepository CommunitiesRepository { get; }
-        GroupRepository GroupRepository { get; }
+        
         void Save();
     }
 }

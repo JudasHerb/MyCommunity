@@ -21,13 +21,27 @@ namespace MyCommunity.Controllers
         
         public ActionResult Index()
         {
-            var user = _unitOfWork.UsersRepository.FindBy(u => u.UserName == WebSecurity.CurrentUserName).First();
-            var groups = user.Community.Groups.Where(g => g.Members.Contains(user)).ToList();
-            var campaigns = user.Community.Campaigns.Where(c => c.Members.Contains(user)).ToList();
+            var user = _unitOfWork.UsersRepository.CurrentUser();
             
-            return View(new IndexViewModel(user.Community, groups, campaigns));
+            return View(new IndexViewModel(user.Community));
         }
 
+        public ActionResult Group(int id)
+        {
+            var user = _unitOfWork.UsersRepository.CurrentUser();
+            var group = user.Community.Groups.Where(g => g.GroupID == id).FirstOrDefault();
+
+            if (group == null) RedirectToAction("Index");
+
+            if (!group.Members.Contains(user) && !group.IsPublic )
+            {
+                return View("UnauthorisedGroup");
+            }
+            else
+            {
+                return View();
+            }
+        }
 
         [AllowAnonymous]
         public ActionResult About()
@@ -52,21 +66,55 @@ namespace MyCommunity.Controllers
         [HttpPost]
         public ActionResult CreateGroup(CreateGroupViewModel group)
         {
-            var returnMessage = string.Empty;
+            
             if (ModelState.IsValid)
             {
-                var user = _unitOfWork.UsersRepository.FindBy(u => u.UserName == WebSecurity.CurrentUserName).First();
-                var newGroup = new Groups {Description = group.Description, IsPublic = group.IsPublic, Name = group.Name};
-                newGroup.Members.Add(user);
-                user.Community.Groups.Add(newGroup);
-                _unitOfWork.CommunitiesRepository.Update(user.Community);
+
+                var user = _unitOfWork.UsersRepository.CurrentUser();
+                
+                var newgroup = new Groups
+                    {
+                        Name = group.Name,
+                        Description = group.Description,
+                        IsPublic = group.IsPublic
+                    };
+                newgroup.Members.Add(user);
+                user.Community.Groups.Add(newgroup);
+                
                 _unitOfWork.Save();
+
+                return Json(
+                    new
+                        {
+                            state = "Success",
+                            additional = this.Url.Action("Group", "Home", new {id = 1}, this.Request.Url.Scheme)
+                        });
             }
             else
             {
-                returnMessage = "Need to fill in all data";
+                return Json( new {state = "Fail", additional = "Need to fill in all data"});
             }
-            return Json(returnMessage);
+            
+        }
+
+        [HttpPost]
+        public ActionResult Comment(string comment)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = _unitOfWork.UsersRepository.CurrentUser();
+
+                user.Community.Messages.Add(new Message {Content = comment, From = user, Title = "Test"});
+                
+                _unitOfWork.Save();
+
+                return Json(new { state = "Success", additional = comment });
+            }
+            else
+            {
+                return Json(new { state = "Fail", additional = "Need to fill in all data" });
+            }
+            
         }
     }
 }

@@ -1,0 +1,51 @@
+﻿@model MyCommunity.ViewModels.CreateGroupEventViewModel
+
+<script>
+    $("#submitGroup").live("click", function(e) {
+        e.preventDefault();
+        var name = $("#Name").val();
+        var date = $("#Date").val();
+        
+        
+        $.ajax({
+            type: "POST",
+            url: "/Home/CreateGroupEvent",
+            data: { "name": name, "date":date, "groupId":@Model.GroupID },
+            success: function (data) {
+                
+                if (data.state == "Success") {
+                    $("#newEvemtPopup").dialog("close");
+                    $(location).attr("href", data.additional);
+                }
+                else {
+                    alert(data.additional);
+                }
+            },
+            error: function(data) {
+                $(this).closest("#newEventPopup").dialog("close");
+            }
+        });
+    });
+</script>
+
+@using (Html.BeginForm()) {
+    @Html.AntiForgeryToken()
+
+    <fieldset>
+        <legend>Create Event</legend>
+        <ol>
+            <li>
+                @Html.LabelFor(m => m.Name)
+                @Html.TextBoxFor(m => m.Name)
+            </li>
+            <li>
+                @Html.LabelFor(m => m.Date)
+                @Html.TextBoxFor(m => m.Date)
+            </li>
+            
+        </ol>
+        <input id="submitGroup" type="submit" value="Save" />
+    </fieldset>
+}
+
+

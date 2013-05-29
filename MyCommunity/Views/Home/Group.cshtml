@@ -4,7 +4,7 @@
         $("#newEventPopup").dialog({
             autoOpen: false,
             open: function (event, ui) {
-                $(this).load("@Url.Action("CreateEventPartial")");
+                $(this).load("@Url.Action("CreateGroupEventPartial", new {id=@Model.Id})");
             }
         });
          $("#newEventButton").button().click(function () {

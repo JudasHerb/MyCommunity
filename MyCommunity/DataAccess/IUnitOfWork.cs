@@ -12,7 +12,8 @@ namespace MyCommunity.DataAccess
         CommunityRepository CommunitiesRepository { get; }
         GroupsRepository GroupsRepository { get; }
         CampaignsRepository CampaignsRepository { get; }
-        
+        EventsRepository EventsRepository { get; }
+    
         void Save();
     }
 }

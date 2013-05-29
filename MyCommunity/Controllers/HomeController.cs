@@ -115,8 +115,7 @@ namespace MyCommunity.Controllers
 
         public ActionResult Event(int id)
         {
-            var evt =
-                _unitOfWork.UsersRepository.CurrentUser().Community.Events.Where(e => e.EventID == id).FirstOrDefault();
+            var evt =_unitOfWork.EventsRepository.FindBy(e => e.EventID == id).FirstOrDefault();
             if (evt == null) RedirectToAction("Index");
             return View(new EventViewModel(evt));
         }
@@ -182,6 +181,10 @@ namespace MyCommunity.Controllers
         {
             return PartialView("_CreateEventPartial");
         }
+        public ActionResult CreateGroupEventPartial(int id)
+        {
+            return PartialView("_CreateGroupEventPartial", new CreateGroupEventViewModel{GroupID=id});
+        }
  
         [HttpPost]
         public ActionResult CreateGroup(CreateGroupViewModel group)
@@ -233,6 +236,41 @@ namespace MyCommunity.Controllers
                 };
                 
                 user.Community.Events.Add(newgroup);
+
+                _unitOfWork.Save();
+
+                return Json(
+                    new
+                    {
+                        state = "Success",
+                        additional = this.Url.Action("Event", "Home", new { id = 1 }, this.Request.Url.Scheme)
+                    });
+            }
+            else
+            {
+                return Json(new { state = "Fail", additional = "Need to fill in all data" });
+            }
+
+        }
+        [HttpPost]
+        public ActionResult CreateGroupEvent(CreateGroupEventViewModel group)
+        {
+
+            if (ModelState.IsValid)
+            {
+
+                //var user = _unitOfWork.UsersRepository.CurrentUser();
+                var targetgroup = _unitOfWork.GroupsRepository.FindBy(g => g.GroupID == group.GroupID).FirstOrDefault();
+
+                var newgroup = new Events
+                {
+                    Name = group.Name,
+                    DateTime = group.Date
+
+                };
+
+                targetgroup.Events.Add(newgroup);
+                //user.Community.Events.Add(newgroup);
 
                 _unitOfWork.Save();
 

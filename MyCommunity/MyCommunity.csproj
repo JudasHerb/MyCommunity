@@ -202,6 +202,7 @@
     <Compile Include="DataAccess\IUnitOfWork.cs" />
     <Compile Include="DataAccess\Repositories\CampaignsRepository.cs" />
     <Compile Include="DataAccess\Repositories\CommunityRepository.cs" />
+    <Compile Include="DataAccess\Repositories\EventsRepository.cs" />
     <Compile Include="DataAccess\Repositories\GroupsRepository.cs" />
     <Compile Include="DataAccess\Repositories\IRepository.cs" />
     <Compile Include="DataAccess\Repositories\Repository.cs" />
@@ -227,6 +228,7 @@
     <Compile Include="ViewModels\CouncillorsViewModel.cs" />
     <Compile Include="ViewModels\CreateCampaignViewModel.cs" />
     <Compile Include="ViewModels\CreateEventViewModel.cs" />
+    <Compile Include="ViewModels\CreateGroupEventViewModel.cs" />
     <Compile Include="ViewModels\CreateGroupViewModel.cs" />
     <Compile Include="ViewModels\EventViewModel.cs" />
     <Compile Include="ViewModels\GroupViewModel.cs" />
@@ -363,6 +365,7 @@
     <Content Include="Views\Home\_CreateEventPartial.cshtml" />
     <Content Include="Views\Home\Event.cshtml" />
     <Content Include="Views\Home\BrowseEvents.cshtml" />
+    <Content Include="Views\Home\_CreateGroupEventPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

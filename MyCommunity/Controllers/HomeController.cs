@@ -113,6 +113,14 @@ namespace MyCommunity.Controllers
             return View(new MPViewModel(user.Community.MP));
         }
 
+        public ActionResult Event(int id)
+        {
+            var evt =
+                _unitOfWork.UsersRepository.CurrentUser().Community.Events.Where(e => e.EventID == id).FirstOrDefault();
+            if (evt == null) RedirectToAction("Index");
+            return View(new EventViewModel(evt));
+        }
+
         public ActionResult Group(int id)
         {
             var user = _unitOfWork.UsersRepository.CurrentUser();
@@ -170,6 +178,11 @@ namespace MyCommunity.Controllers
         {
             return PartialView("_CreateCampaignPartial");
         }
+        public ActionResult CreateEventPartial()
+        {
+            return PartialView("_CreateEventPartial");
+        }
+ 
         [HttpPost]
         public ActionResult CreateGroup(CreateGroupViewModel group)
         {
@@ -202,6 +215,39 @@ namespace MyCommunity.Controllers
                 return Json( new {state = "Fail", additional = "Need to fill in all data"});
             }
             
+        }
+        [HttpPost]
+        public ActionResult CreateEvent(CreateEventViewModel group)
+        {
+
+            if (ModelState.IsValid)
+            {
+
+                var user = _unitOfWork.UsersRepository.CurrentUser();
+
+                var newgroup = new Events
+                {
+                    Name = group.Name,
+                    DateTime = group.Date
+                    
+                };
+                
+                user.Community.Events.Add(newgroup);
+
+                _unitOfWork.Save();
+
+                return Json(
+                    new
+                    {
+                        state = "Success",
+                        additional = this.Url.Action("Event", "Home", new { id = 1 }, this.Request.Url.Scheme)
+                    });
+            }
+            else
+            {
+                return Json(new { state = "Fail", additional = "Need to fill in all data" });
+            }
+
         }
         [HttpPost]
         public ActionResult CreateCampaign(CreateCampaignViewModel campaign)
@@ -255,6 +301,40 @@ namespace MyCommunity.Controllers
                 return Json(new { state = "Fail", additional = "Need to fill in all data" });
             }
             
+        }
+
+        public ActionResult BrowseCampaigns()
+        {
+            return View(new BrowseCampaignsViewModel(_unitOfWork.UsersRepository.CurrentUser().Community.Campaigns.ToList()));
+        }
+        public ActionResult BrowseGroups()
+        {
+            return View(new BrowseGroupsViewModel(_unitOfWork.UsersRepository.CurrentUser().Community.Groups.ToList()));
+        }
+        public ActionResult BrowseEvents()
+        {
+            return View(new BrowseEventsViewModel(_unitOfWork.UsersRepository.CurrentUser().Community.Events.ToList()));
+        }
+
+        public ActionResult JoinCampaign(int Id)
+        {
+            var campaign = _unitOfWork.CampaignsRepository.FindBy(c => c.CampaignID == Id).FirstOrDefault();
+            if (campaign != null)
+            {
+                campaign.Members.Add(_unitOfWork.UsersRepository.CurrentUser());
+                _unitOfWork.Save();
+            }
+            return RedirectToAction("Campaign", new {id = Id});
+        }
+        public ActionResult JoinGroup(int Id)
+        {
+            var campaign = _unitOfWork.GroupsRepository.FindBy(c => c.GroupID == Id).FirstOrDefault();
+            if (campaign != null)
+            {
+                campaign.Members.Add(_unitOfWork.UsersRepository.CurrentUser());
+                _unitOfWork.Save();
+            }
+            return RedirectToAction("Group", new { id = Id });
         }
     }
 }

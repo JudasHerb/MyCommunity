@@ -1,0 +1,10 @@
+﻿@model MyCommunity.ViewModels.BrowseEventsViewModel
+@{
+    ViewBag.Title = "BrowseEvents";
+}
+
+<h2>BrowseEvents</h2>
+@foreach (var camp in Model.Evts)
+{
+    <p> @camp.Value</p>
+}

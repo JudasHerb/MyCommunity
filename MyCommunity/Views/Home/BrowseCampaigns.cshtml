@@ -1,0 +1,11 @@
+﻿@model MyCommunity.ViewModels.BrowseCampaignsViewModel
+@{
+    ViewBag.Title = "BrowseCampaigns";
+}
+
+<h2>BrowseCampaigns</h2>
+@foreach (var camp in Model.Campaigns)
+{
+    <p> @camp.Value - 
+    @Html.ActionLink("Join","JoinCampaign",new {id=camp.Key})</p>
+}

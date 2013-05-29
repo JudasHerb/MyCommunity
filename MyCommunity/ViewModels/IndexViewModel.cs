@@ -10,11 +10,9 @@ namespace MyCommunity.ViewModels
         public IndexViewModel(UserProfile user )
         {
 
-            
-
             Campaigns = new Dictionary<int, string>();
             Groups = new Dictionary<int, string>();
-
+            Evts = new Dictionary<int, string>();
             if (user.Community != null)
             {
                 CommunityName = user.Community.Name;
@@ -28,6 +26,12 @@ namespace MyCommunity.ViewModels
                 {
                     Groups.Add(group.GroupID, group.Name);
                 }
+
+                foreach (var evt in user.Community.Events)
+                {
+                    Evts.Add(evt.EventID, evt.Name);
+                }
+            
                 Comments = new MessagesViewModel(user.Community.Messages.OrderByDescending(m => m.MessageID).Take(5).ToList());
             }
             else
@@ -40,8 +44,10 @@ namespace MyCommunity.ViewModels
 
         public Dictionary<int, string> Campaigns { get; set; }
         public Dictionary<int, string> Groups { get; set; }
+        public Dictionary<int, string> Evts { get; set; }
+
         public MessagesViewModel Comments { get; set; }
+}
     }
 
     
-}

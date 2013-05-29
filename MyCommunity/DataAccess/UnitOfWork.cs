@@ -16,6 +16,8 @@ namespace MyCommunity.DataAccess
     {
         private UsersRepository _usersRepository;
         private CommunityRepository _communtiesRepository;
+        private GroupsRepository _groupsRepository;
+        private CampaignsRepository _campaignsRepository;
         
         public UnitOfWork()
             : base("DefaultConnection")
@@ -24,7 +26,8 @@ namespace MyCommunity.DataAccess
 
         public DbSet<UserProfile> UserProfiles { get; set; }
         public DbSet<Community> Communities { get; set; }
-        
+        public DbSet<Campaigns> Campaigns { get; set; }
+        public DbSet<Groups> Groups { get; set; }
 
         #region IUnitOfWork Members
   
@@ -43,7 +46,16 @@ namespace MyCommunity.DataAccess
             get { return _communtiesRepository ?? (_communtiesRepository = new CommunityRepository(this)); }
         }
 
-        
+        public GroupsRepository GroupsRepository
+        {
+            get { return _groupsRepository ?? (_groupsRepository = new GroupsRepository(this)); }
+        }
+        public CampaignsRepository CampaignsRepository
+        {
+            get { return _campaignsRepository ?? (_campaignsRepository = new CampaignsRepository(this)); }
+        }
+
+
         #endregion
     }
 }

@@ -13,6 +13,17 @@
         });
     });
     $(function () {
+        $("#newEventPopup").dialog({
+            autoOpen: false,
+            open: function (event, ui) {
+                $(this).load("@Url.Action("CreateEventPartial")");
+            }
+        });
+            $("#newEventButton").button().click(function () {
+                $("#newEventPopup").dialog("open");
+            });
+        });
+    $(function () {
         $("#newCampaignPopup").dialog({
             autoOpen: false,
             open: function (event, ui) {
@@ -52,10 +63,19 @@
 <div id="menu">
     <p>@Html.ActionLink("My Home", "Index")</p>
     <p>@Html.ActionLink("My Messages", "Messages")</p>
-    <p>@Html.ActionLink("Upcoming Events", "Index")</p>
     <p>@Html.ActionLink("My Councillors", "Councillors")</p>
     <p>@Html.ActionLink("My MP", "MP")</p>
     <p>@Html.ActionLink("My Neighbours", "Neighbours")</p>
+    <p>Community Events</p>
+    <ul>
+        @foreach (var group in Model.Evts)
+        {
+            <li>@Html.ActionLink(group.Value, "Event", new { id = group.Key })</li>
+        }
+    </ul>
+    <button id="newEventButton">Create Event</button>
+    @Html.ActionLink("Browse", "BrowseEvents")
+    <div id="newEventPopup" title="Dialog Title"></div>
 
     <p>My Groups</p>
 
@@ -66,6 +86,7 @@
         }
     </ul>
     <button id="newGroupButton">Create Group</button>
+    @Html.ActionLink("Browse", "BrowseGroups")
     <div id="newGroupPopup" title="Dialog Title"></div>
 
 
@@ -77,6 +98,7 @@
         }
     </ul>
     <button id="newCampaignButton">Create Campaign</button>
+    @Html.ActionLink("Browse", "BrowseCampaigns")
     <div id="newCampaignPopup" title="Dialog Title"></div>
 
 

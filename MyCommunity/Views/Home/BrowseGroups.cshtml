@@ -1,0 +1,11 @@
+﻿@model MyCommunity.ViewModels.BrowseGroupsViewModel
+@{
+    ViewBag.Title = "BrowseGroups";
+}
+
+<h2>BrowseGroups</h2>
+@foreach (var camp in Model.Groups)
+{
+    <p> @camp.Value - 
+    @Html.ActionLink("Join","JoinGroup",new {id=camp.Key})</p>
+}

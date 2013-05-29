@@ -23,7 +23,94 @@ namespace MyCommunity.Controllers
         {
             var user = _unitOfWork.UsersRepository.CurrentUser();
             
-            return View(new IndexViewModel(user.Community));
+            return View(new IndexViewModel(user));
+        }
+
+        public ActionResult Messages()
+        {
+            var user = _unitOfWork.UsersRepository.CurrentUser();
+
+            return View(new MessagesViewModel(user.Messages.ToList()));
+        }
+
+        public ActionResult Councillors()
+        {
+            var user = _unitOfWork.UsersRepository.CurrentUser();
+
+            return View(new CouncillorsViewModel(user.Community.Councillors.ToList()));
+        }
+        public ActionResult Neighbours()
+        {
+            var user = _unitOfWork.UsersRepository.CurrentUser();
+
+            return View(new NeighboursViewModel(user.Community.Members.ToList()));
+        }
+        public ActionResult Neighbour(int id)
+        {
+            var user = _unitOfWork.UsersRepository.FindBy(u => u.UserId == id).FirstOrDefault();
+            if (user != null)
+            {
+                return View(new NeighbourViewModel{Name=user.UserName, ID=user.UserId});
+            }
+            else
+            {
+                return View(new NeighbourViewModel { Name = "Unknown" });
+            }
+
+            
+        }
+
+        [HttpPost]
+        public ActionResult MessageNeighbour(int id, string comment)
+        {
+            var target = _unitOfWork.UsersRepository.FindBy(u => u.UserId == id).FirstOrDefault();
+            if (target != null)
+            {
+                target.Messages.Add(new Message{Content=comment});
+                _unitOfWork.Save();
+            }
+            return RedirectToAction("Index");
+        }
+        [HttpPost]
+        public ActionResult CommentGroup(int id, string comment)
+        {
+            var target = _unitOfWork.UsersRepository.CurrentUser().Groups.Where(g => g.GroupID == id).FirstOrDefault();
+            if (target != null)
+            {
+                target.Messages.Add(new Message { Content = comment });
+                _unitOfWork.Save();
+
+                 return Json(new { state = "Success", additional = comment });
+            }
+            else
+            {
+                return Json(new { state = "Fail", additional = comment });
+            }
+            
+        }
+        [HttpPost]
+        public ActionResult CommentCampaign(int id, string comment)
+        {
+            var target = _unitOfWork.UsersRepository.CurrentUser().Campaigns.Where(g => g.CampaignID == id).FirstOrDefault();
+            if (target != null)
+            {
+                target.Messages.Add(new Message { Content = comment });
+                _unitOfWork.Save();
+
+                return Json(new { state = "Success", additional = comment });
+            }
+            else
+            {
+                return Json(new { state = "Fail", additional = comment });
+            }
+
+        }
+
+        public ActionResult MP()
+        {
+            var user = _unitOfWork.UsersRepository.CurrentUser();
+
+            return View(new MPViewModel(user.Community.MP));
         }
 
         public ActionResult Group(int id)
@@ -39,7 +126,23 @@ namespace MyCommunity.Controllers
             }
             else
             {
-                return View();
+                return View(new GroupViewModel(group));
+            }
+        }
+        public ActionResult Campaign(int id)
+        {
+            var user = _unitOfWork.UsersRepository.CurrentUser();
+            var group = user.Community.Campaigns.Where(c => c.CampaignID == id).FirstOrDefault();
+
+            if (group == null) RedirectToAction("Index");
+
+            if (!group.Members.Contains(user))
+            {
+                return View("UnauthorisedCampaign");
+            }
+            else
+            {
+                return View(new CampaignViewModel(group));
             }
         }
 
@@ -62,6 +165,10 @@ namespace MyCommunity.Controllers
         public ActionResult CreateGroupPartial()
         {
             return PartialView("_CreateGroupPartial");
+        }
+        public ActionResult CreateCampaignPartial()
+        {
+            return PartialView("_CreateCampaignPartial");
         }
         [HttpPost]
         public ActionResult CreateGroup(CreateGroupViewModel group)
@@ -95,6 +202,39 @@ namespace MyCommunity.Controllers
                 return Json( new {state = "Fail", additional = "Need to fill in all data"});
             }
             
+        }
+        [HttpPost]
+        public ActionResult CreateCampaign(CreateCampaignViewModel campaign)
+        {
+
+            if (ModelState.IsValid)
+            {
+
+                var user = _unitOfWork.UsersRepository.CurrentUser();
+
+                var newcampaign = new Campaigns
+                {
+                    Name = campaign.Name,
+                    Description = campaign.Description,
+                    
+                };
+                newcampaign.Members.Add(user);
+                user.Community.Campaigns.Add(newcampaign);
+
+                _unitOfWork.Save();
+
+                return Json(
+                    new
+                    {
+                        state = "Success",
+                        additional = this.Url.Action("Campaign", "Home", new { id = 1 }, this.Request.Url.Scheme)
+                    });
+            }
+            else
+            {
+                return Json(new { state = "Fail", additional = "Need to fill in all data" });
+            }
+
         }
 
         [HttpPost]

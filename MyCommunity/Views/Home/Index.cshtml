@@ -12,6 +12,17 @@
             $("#newGroupPopup").dialog("open");
         });
     });
+    $(function () {
+        $("#newCampaignPopup").dialog({
+            autoOpen: false,
+            open: function (event, ui) {
+                $(this).load("@Url.Action("CreateCampaignPartial")");
+            }
+        });
+         $("#newCampaignButton").button().click(function () {
+             $("#newCampaignPopup").dialog("open");
+         });
+     });
         $('#submitComment').live("click", function (event) {
             var comment = $("#comment").val();
             $.ajax({
@@ -40,8 +51,11 @@
 
 <div id="menu">
     <p>@Html.ActionLink("My Home", "Index")</p>
-    <p>@Html.ActionLink("My Messages", "Index")</p>
+    <p>@Html.ActionLink("My Messages", "Messages")</p>
     <p>@Html.ActionLink("Upcoming Events", "Index")</p>
+    <p>@Html.ActionLink("My Councillors", "Councillors")</p>
+    <p>@Html.ActionLink("My MP", "MP")</p>
+    <p>@Html.ActionLink("My Neighbours", "Neighbours")</p>
 
     <p>My Groups</p>
 
@@ -62,9 +76,12 @@
             <li>@Html.ActionLink(campaign.Value, "Campaign", new { id = campaign.Key })</li>
         }
     </ul>
+    <button id="newCampaignButton">Create Campaign</button>
+    <div id="newCampaignPopup" title="Dialog Title"></div>
 
 
 </div>
+
 <div id="homeBody">
     @using (Html.BeginForm("Comment", "Home"))
     {
@@ -82,10 +99,10 @@
         </fieldset>
     }
     <div id="comments">
-        @foreach (var comment in Model.Comments)
+        @foreach (var comment in Model.Comments.Messages)
         {
             <p>
-                @comment.Content
+                @comment.Message
             </p>
         }
     </div>

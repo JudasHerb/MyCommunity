@@ -1,9 +1,9 @@
-﻿@model MyCommunity.ViewModels.GroupViewModel
+﻿@model MyCommunity.ViewModels.CampaignViewModel
 <script>
     $('#submitComment').live("click", function (event) {
         var comment = $("#comment").val();
         $.ajax({
-            url: "/Home/CommentGroup",
+            url: "/Home/CommentCampaign",
             type: "POST",
             data: { "comment": comment,"id":@Model.Id },
             success: function (data) {
@@ -22,7 +22,7 @@
     });
 </script>
 @{
-    ViewBag.Title = "Group";
+    ViewBag.Title = "Campaign";
 }
 
 <h2>@Model.Name</h2>

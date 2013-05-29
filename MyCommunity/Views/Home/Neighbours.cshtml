@@ -1,0 +1,10 @@
+﻿@model MyCommunity.ViewModels.NeighboursViewModel
+@{
+    ViewBag.Title = "Neighbours";
+}
+
+<h2>Neighbours</h2>
+@foreach (var n in Model.Neighbours)
+{
+    @Html.ActionLink(n.Value,"Neighbour", new {id=n.Key})
+}

@@ -1,0 +1,23 @@
+﻿@model MyCommunity.ViewModels.NeighbourViewModel
+@{
+    ViewBag.Title = "Neighbour";
+}
+
+<h2>@Model.Name</h2>
+
+
+ @using (Html.BeginForm("MessageNeighbour", "Home", new {id=Model.ID}))
+    {
+        @Html.AntiForgeryToken()
+
+        <fieldset>
+            <legend>Post:</legend>
+            <ol>
+                <li>
+                    <label>Comment</label>
+                    <input type="text" name="comment" id="comment" />
+                </li>
+            </ol>
+            <input id="submitComment" type="submit" value="Post" />
+        </fieldset>
+    }

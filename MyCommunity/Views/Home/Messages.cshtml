@@ -1,0 +1,10 @@
+﻿@model MyCommunity.ViewModels.MessagesViewModel
+@{
+    ViewBag.Title = "Messages";
+}
+
+<h2>Messages</h2>
+@foreach (var msg in Model.Messages)
+{
+    <p>@msg.Message</p>
+}

@@ -212,12 +212,22 @@
     <Compile Include="Models\AccountModels.cs" />
     <Compile Include="Models\Campaigns.cs" />
     <Compile Include="Models\Community.cs" />
+    <Compile Include="Models\Councillors.cs" />
     <Compile Include="Models\Events.cs" />
     <Compile Include="Models\Groups.cs" />
     <Compile Include="Models\Message.cs" />
+    <Compile Include="Models\MP.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ViewModels\CampaignViewModel.cs" />
+    <Compile Include="ViewModels\CouncillorsViewModel.cs" />
+    <Compile Include="ViewModels\CreateCampaignViewModel.cs" />
     <Compile Include="ViewModels\CreateGroupViewModel.cs" />
+    <Compile Include="ViewModels\GroupViewModel.cs" />
     <Compile Include="ViewModels\IndexViewModel.cs" />
+    <Compile Include="ViewModels\MessagesViewModel.cs" />
+    <Compile Include="ViewModels\MPViewModel.cs" />
+    <Compile Include="ViewModels\NeighboursViewModel.cs" />
+    <Compile Include="ViewModels\NeighbourViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
@@ -333,6 +343,14 @@
     <Content Include="Views\Home\_CreateGroupPartial.cshtml" />
     <Content Include="Views\Home\UnauthorisedGroup.cshtml" />
     <Content Include="Views\Home\Group.cshtml" />
+    <Content Include="Views\Home\_CreateCampaignPartial.cshtml" />
+    <Content Include="Views\Home\Campaign.cshtml" />
+    <Content Include="Views\Home\UnauthorisedCampaign.cshtml" />
+    <Content Include="Views\Home\Messages.cshtml" />
+    <Content Include="Views\Home\Councillors.cshtml" />
+    <Content Include="Views\Home\MP.cshtml" />
+    <Content Include="Views\Home\Neighbours.cshtml" />
+    <Content Include="Views\Home\Neighbour.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

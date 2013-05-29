@@ -37,5 +37,9 @@ namespace MyCommunity.Models
         public virtual ICollection<Events> Events { get; set; }
 
         public virtual ICollection<Message> Messages { get; set; }
+
+        public virtual ICollection<Councillors> Councillors { get; set; }
+
+        public MP MP { get; set; } 
     }
 }

@@ -40,7 +40,8 @@ namespace MyCommunity.Migrations
                     var judas = context.UsersRepository.FindBy(m => m.UserName == "JudasHerb").First();
                     if (judas.Community == null)
                     {
-                        judas.Community = community;
+                        community.Members.Add(judas);
+
                         context.UsersRepository.Update(judas);
                     }
                 }

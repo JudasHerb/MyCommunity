@@ -18,6 +18,13 @@ namespace MyCommunity.Controllers
     //[InitializeSimpleMembership]
     public class AccountController : Controller
     {
+        private readonly IUnitOfWork _unitOfWork;
+
+        public AccountController(IUnitOfWork unitOfWork)
+        {
+            _unitOfWork = unitOfWork;
+        }
+
         //
         // GET: /Account/Login
 
@@ -80,8 +87,18 @@ namespace MyCommunity.Controllers
                 // Attempt to register the user
                 try
                 {
+                    var community = _unitOfWork.CommunitiesRepository.GetAll().First();
+
                     WebSecurity.CreateUserAndAccount(model.UserName, model.Password);
+                    
                     WebSecurity.Login(model.UserName, model.Password);
+
+                    var user = _unitOfWork.UsersRepository.FindBy(u => u.UserName == model.UserName).First();
+                    user.Community = community;
+                    community.Members.Add(user);
+                    
+                    _unitOfWork.Save();
+
                     return RedirectToAction("Index", "Home");
                 }
                 catch (MembershipCreateUserException e)

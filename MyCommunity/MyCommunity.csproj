@@ -226,6 +226,7 @@
     <Compile Include="ViewModels\BrowseGroupsViewModel.cs" />
     <Compile Include="ViewModels\CampaignViewModel.cs" />
     <Compile Include="ViewModels\CouncillorsViewModel.cs" />
+    <Compile Include="ViewModels\CreateCampaignEventViewModel.cs" />
     <Compile Include="ViewModels\CreateCampaignViewModel.cs" />
     <Compile Include="ViewModels\CreateEventViewModel.cs" />
     <Compile Include="ViewModels\CreateGroupEventViewModel.cs" />
@@ -366,6 +367,7 @@
     <Content Include="Views\Home\Event.cshtml" />
     <Content Include="Views\Home\BrowseEvents.cshtml" />
     <Content Include="Views\Home\_CreateGroupEventPartial.cshtml" />
+    <Content Include="Views\Home\_CreateCampaignEventPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

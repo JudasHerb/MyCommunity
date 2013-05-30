@@ -185,6 +185,10 @@ namespace MyCommunity.Controllers
         {
             return PartialView("_CreateGroupEventPartial", new CreateGroupEventViewModel{GroupID=id});
         }
+        public ActionResult CreateCampaignEventPartial(int id)
+        {
+            return PartialView("_CreateCampaignEventPartial", new CreateCampaignEventViewModel { CampaignID = id });
+        }
  
         [HttpPost]
         public ActionResult CreateGroup(CreateGroupViewModel group)
@@ -261,6 +265,41 @@ namespace MyCommunity.Controllers
 
                 //var user = _unitOfWork.UsersRepository.CurrentUser();
                 var targetgroup = _unitOfWork.GroupsRepository.FindBy(g => g.GroupID == group.GroupID).FirstOrDefault();
+
+                var newgroup = new Events
+                {
+                    Name = group.Name,
+                    DateTime = group.Date
+
+                };
+
+                targetgroup.Events.Add(newgroup);
+                //user.Community.Events.Add(newgroup);
+
+                _unitOfWork.Save();
+
+                return Json(
+                    new
+                    {
+                        state = "Success",
+                        additional = this.Url.Action("Event", "Home", new { id = 1 }, this.Request.Url.Scheme)
+                    });
+            }
+            else
+            {
+                return Json(new { state = "Fail", additional = "Need to fill in all data" });
+            }
+
+        }
+        [HttpPost]
+        public ActionResult CreateCampaignEvent(CreateCampaignEventViewModel group)
+        {
+
+            if (ModelState.IsValid)
+            {
+
+                //var user = _unitOfWork.UsersRepository.CurrentUser();
+                var targetgroup = _unitOfWork.CampaignsRepository.FindBy(g => g.CampaignID == group.CampaignID).FirstOrDefault();
 
                 var newgroup = new Events
                 {

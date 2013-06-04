@@ -1,4 +1,17 @@
 ﻿@model MyCommunity.ViewModels.BrowseCampaignsViewModel
+<script>
+    $(function () {
+        $("#newCampaignPopup").dialog({
+            autoOpen: false,
+            open: function (event, ui) {
+                $(this).load("@Url.Action("CreateCampaignPartial")");
+            }
+        });
+            $("#newCampaignButton").button().click(function () {
+                $("#newCampaignPopup").dialog("open");
+            });
+        });
+</script>
 @{
     ViewBag.Title = "BrowseCampaigns";
 }
@@ -9,3 +22,6 @@
     <p> @camp.Value - 
     @Html.ActionLink("Join","JoinCampaign",new {id=camp.Key})</p>
 }
+<button id="newCampaignButton">Create Campaign</button>
+<div id="newCampaignPopup" title="Dialog Title"></div>
+    

@@ -1,40 +1,12 @@
 ﻿@model MyCommunity.ViewModels.IndexViewModel
 
 <script>
-    $(function () {
-        $("#newGroupPopup").dialog({
-            autoOpen: false,
-            open: function (event, ui) {
-                $(this).load("@Url.Action("CreateGroupPartial")");
-            }
+    $(function() {
+        $('#mnu').accordion({
+            heightStyle: "content",
+            collapsible:true
         });
-        $("#newGroupButton").button().click(function () {
-            $("#newGroupPopup").dialog("open");
-        });
-    });
-    $(function () {
-        $("#newEventPopup").dialog({
-            autoOpen: false,
-            open: function (event, ui) {
-                $(this).load("@Url.Action("CreateEventPartial")");
-            }
-        });
-            $("#newEventButton").button().click(function () {
-                $("#newEventPopup").dialog("open");
-            });
-        });
-    $(function () {
-        $("#newCampaignPopup").dialog({
-            autoOpen: false,
-            open: function (event, ui) {
-                $(this).load("@Url.Action("CreateCampaignPartial")");
-            }
-        });
-         $("#newCampaignButton").button().click(function () {
-             $("#newCampaignPopup").dialog("open");
-         });
-     });
-        $('#submitComment').live("click", function (event) {
+        $('#submitComment').button().click(function (event) {
             var comment = $("#comment").val();
             $.ajax({
                 url: "/Home/Comment",
@@ -43,6 +15,7 @@
                 success: function (data) {
                     if (data.state == "Success") {
                         $('#comments').prepend('<p>' + data.additional + '</p>');
+                        $("#comment").val(null);
                     }
                     else {
                         alert(data.additional);
@@ -54,57 +27,70 @@
             });
             return false;
         });
+
+    });
+
+
+
+   
 </script>
+ 
 
 @{
     ViewBag.Title = @Model.CommunityName;
 }
-
-<div id="menu">
-    <p>@Html.ActionLink("My Home", "Index")</p>
-    <p>@Html.ActionLink("My Messages", "Messages")</p>
-    <p>@Html.ActionLink("My Councillors", "Councillors")</p>
-    <p>@Html.ActionLink("My MP", "MP")</p>
-    <p>@Html.ActionLink("My Neighbours", "Neighbours")</p>
-    <p>Community Events</p>
-    <ul>
-        @foreach (var group in Model.Evts)
-        {
-            <li>@Html.ActionLink(group.Value, "Event", new { id = group.Key })</li>
-        }
-    </ul>
-    <button id="newEventButton">Create Event</button>
-    @Html.ActionLink("Browse", "BrowseEvents")
-    <div id="newEventPopup" title="Dialog Title"></div>
-
-    <p>My Groups</p>
-
-    <ul>
-        @foreach (var group in Model.Groups)
-        {
-            <li>@Html.ActionLink(group.Value, "Group", new { id = group.Key })</li>
-        }
-    </ul>
-    <button id="newGroupButton">Create Group</button>
-    @Html.ActionLink("Browse", "BrowseGroups")
-    <div id="newGroupPopup" title="Dialog Title"></div>
-
-
-    <p>My Campaigns</p>
-    <ul>
-        @foreach (var campaign in Model.Campaigns)
-        {
-            <li>@Html.ActionLink(campaign.Value, "Campaign", new { id = campaign.Key })</li>
-        }
-    </ul>
-    <button id="newCampaignButton">Create Campaign</button>
-    @Html.ActionLink("Browse", "BrowseCampaigns")
-    <div id="newCampaignPopup" title="Dialog Title"></div>
-
-
-</div>
-
-<div id="homeBody">
+<table>
+    <tr>
+        <td style="width:300px;vertical-align:top;">
+    <div id="mnu">
+        <h3>@Html.ActionLink("My Messages", "Messages")</h3>
+        <div></div>
+        <h3>@Html.ActionLink("My Councillors", "Councillors")</h3>
+        <div></div>
+        <h3>@Html.ActionLink("My MP", "MP")</h3>
+        <div></div>
+        <h3>@Html.ActionLink("My Neighbours", "Neighbours")</h3>
+        <div></div>
+        <h3>Community Events</h3>
+        <div>
+            
+                
+                    @foreach (var group in Model.Evts)
+                    {
+                        <p >@Html.ActionLink(group.Value, "Event", new { id = group.Key })</p>
+                    }
+                
+                
+                <p style="float:right">@Html.ActionLink("Browse", "BrowseEvents")</p>
+            
+        </div>
+        <h3>My Groups</h3>
+        <div>
+            
+                
+                    @foreach (var group in Model.Groups)
+                    {
+                        <p>@Html.ActionLink(group.Value, "Group", new { id = group.Key })</p>
+                    }
+                
+                
+            <p style="float:right">@Html.ActionLink("Browse", "BrowseGroups")</p>
+            
+        </div>
+        <h3>My Campaigns</h3>
+        <div>
+            
+                    @foreach (var campaign in Model.Campaigns)
+                    {
+                        <p>@Html.ActionLink(campaign.Value, "Campaign", new { id = campaign.Key })</p>
+                    }
+            
+                
+            <p style="float:right">@Html.ActionLink("Browse", "BrowseCampaigns")</p>
+        </div>
+    </div>        
+        </td>
+        <td style="vertical-align:top" >
     @using (Html.BeginForm("Comment", "Home"))
     {
         @Html.AntiForgeryToken()
@@ -127,7 +113,16 @@
                 @comment.Message
             </p>
         }
-    </div>
-</div>
+    </div>            
+        </td>
+    </tr>
+</table>    
+
+
+    
+
+
+
+
 
 

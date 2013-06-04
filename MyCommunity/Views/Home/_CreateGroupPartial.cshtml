@@ -1,8 +1,8 @@
 ﻿@model MyCommunity.ViewModels.CreateGroupViewModel
 
 <script>
-    $("#submitGroup").live("click", function(e) {
-        e.preventDefault();
+    $("#submitGroup").button().click( function(event) {
+        event.preventDefault();
         var name = $("#Name").val();
         var description = $("#Description").val();
         var isPublic = $("#IsPublic").is(':checked');

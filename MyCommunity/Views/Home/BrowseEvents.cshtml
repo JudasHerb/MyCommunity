@@ -1,4 +1,17 @@
 ﻿@model MyCommunity.ViewModels.BrowseEventsViewModel
+<script>
+    $(function () {
+        $("#newEventPopup").dialog({
+            autoOpen: false,
+            open: function (event, ui) {
+                $(this).load("@Url.Action("CreateEventPartial")");
+            }
+        });
+        $("#newEventButton").button().click(function () {
+            $("#newEventPopup").dialog("open");
+        });
+    });
+    </script>
 @{
     ViewBag.Title = "BrowseEvents";
 }
@@ -8,3 +21,7 @@
 {
     <p> @camp.Value</p>
 }
+<button id="newEventButton">Create Event</button>
+
+    <div id="newEventPopup" title="Dialog Title"></div>
+    

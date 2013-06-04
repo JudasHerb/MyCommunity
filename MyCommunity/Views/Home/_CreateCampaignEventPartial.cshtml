@@ -1,8 +1,9 @@
 ﻿@model MyCommunity.ViewModels.CreateCampaignEventViewModel
 
 <script>
-    $("#submitGroup").live("click", function(e) {
-        e.preventDefault();
+    
+    $("#submitGroup99").button().click(function (event) {
+        event.preventDefault();
         var name = $("#Name").val();
         var date = $("#Date").val();
         
@@ -26,6 +27,7 @@
             }
         });
     });
+
 </script>
 
 @using (Html.BeginForm()) {
@@ -44,7 +46,7 @@
             </li>
             
         </ol>
-        <input id="submitGroup" type="submit" value="Save" />
+        <input id="submitGroup99" type="submit" value="Save" />
     </fieldset>
 }
 

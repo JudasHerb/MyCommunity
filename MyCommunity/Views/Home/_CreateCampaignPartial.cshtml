@@ -1,8 +1,8 @@
 ﻿@model MyCommunity.ViewModels.CreateCampaignViewModel
 
 <script>
-    $("#submitGroup").live("click", function(e) {
-        e.preventDefault();
+    $("#submitGroup13").button().click(function (event) {
+        event.preventDefault();
         var name = $("#Name").val();
         var description = $("#Description").val();
         var isPublic = $("#IsPublic").is(':checked');
@@ -43,7 +43,7 @@
                 @Html.TextAreaFor(m => m.Description)
             </li>
         </ol>
-        <input id="submitGroup" type="submit" value="Save" />
+        <input id="submitGroup13" type="submit" value="Save" />
     </fieldset>
 }
 

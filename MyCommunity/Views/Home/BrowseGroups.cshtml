@@ -1,4 +1,17 @@
 ﻿@model MyCommunity.ViewModels.BrowseGroupsViewModel
+<script>
+    $(function () {
+        $("#newGroupPopup").dialog({
+            autoOpen: false,
+            open: function (event, ui) {
+                $(this).load("@Url.Action("CreateGroupPartial")");
+            }
+        });
+            $("#newGroupButton").button().click(function () {
+                $("#newGroupPopup").dialog("open");
+            });
+        });
+</script>
 @{
     ViewBag.Title = "BrowseGroups";
 }
@@ -9,3 +22,5 @@
     <p> @camp.Value - 
     @Html.ActionLink("Join","JoinGroup",new {id=camp.Key})</p>
 }
+<button id="newGroupButton">Create Group</button>
+<div id="newGroupPopup" title="Dialog Title"></div>

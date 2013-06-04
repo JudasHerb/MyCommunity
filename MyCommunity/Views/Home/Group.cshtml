@@ -10,13 +10,13 @@
          $("#newEventButton").button().click(function () {
              $("#newEventPopup").dialog("open");
          });
-     });
-    $('#submitComment').live("click", function (event) {
-        var comment = $("#comment").val();
-        $.ajax({
-            url: "/Home/CommentGroup",
-            type: "POST",
-            data: { "comment": comment,"id":@Model.Id},
+         $('#submitComment').button().click(function (event) {
+             event.preventDefault();
+             var comment = $("#comment").val();
+             $.ajax({
+                 url: "/Home/CommentGroup",
+                 type: "POST",
+                 data: { "comment": comment,"id":@Model.Id},
             success: function (data) {
                 if (data.state == "Success") {
                     $('#comments').prepend('<p>' + data.additional + '</p>');
@@ -29,8 +29,10 @@
                 alert('Oops. Something wnet wrong!');
             }
         });
-        return false;
-    });
+             return false;
+         });
+     });
+   
 </script>
 @{
     ViewBag.Title = "Group";

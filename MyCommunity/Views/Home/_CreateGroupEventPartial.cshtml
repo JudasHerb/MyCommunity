@@ -1,8 +1,8 @@
 ﻿@model MyCommunity.ViewModels.CreateGroupEventViewModel
 
 <script>
-    $("#submitGroup").live("click", function(e) {
-        e.preventDefault();
+    $("#submitGroup14").button().click(function (event) {
+        event.preventDefault();
         var name = $("#Name").val();
         var date = $("#Date").val();
         
@@ -44,7 +44,7 @@
             </li>
             
         </ol>
-        <input id="submitGroup" type="submit" value="Save" />
+        <input id="submitGroup14" type="submit" value="Save" />
     </fieldset>
 }
 

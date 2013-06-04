@@ -1,31 +1,32 @@
 ﻿@model MyCommunity.ViewModels.CreateEventViewModel
 
 <script>
-    $("#submitGroup").live("click", function(e) {
-        e.preventDefault();
-        var name = $("#Name").val();
-        var date = $("#Date").val();
+
+    $("#submitGroup12").button().click(function (event) {
+        event.preventDefault();
+            var name = $("#Name").val();
+            var date = $("#Date").val();
         
-        
-        $.ajax({
-            type: "POST",
-            url: "/Home/CreateEvent",
-            data: { "name": name, "date":date },
-            success: function (data) {
-                
-                if (data.state == "Success") {
-                    $("#newEvemtPopup").dialog("close");
-                    $(location).attr("href", data.additional);
+
+            $.ajax({
+                type: "POST",
+                url: "/Home/CreateEvent",
+                data: { "name": name, "date": date },
+                success: function(data) {
+
+                    if (data.state == "Success") {
+                        $("#newEventPopup").dialog("close");
+                        $(location).attr("href", data.additional);
+                    } else {
+                        alert(data.additional);
+                    }
+                },
+                error: function(data) {
+                    $(this).closest("#newEventPopup").dialog("close");
                 }
-                else {
-                    alert(data.additional);
-                }
-            },
-            error: function(data) {
-                $(this).closest("#newEventPopup").dialog("close");
-            }
+            });
         });
-    });
+
 </script>
 
 @using (Html.BeginForm()) {
@@ -44,7 +45,7 @@
             </li>
             
         </ol>
-        <input id="submitGroup" type="submit" value="Save" />
+        <input id="submitGroup12" type="submit" value="Save" />
     </fieldset>
 }
 

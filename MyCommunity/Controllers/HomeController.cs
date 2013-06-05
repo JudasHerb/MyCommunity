@@ -236,7 +236,7 @@ namespace MyCommunity.Controllers
                     new
                         {
                             state = "Success",
-                            additional = this.Url.Action("Group", "Home", new {id = newgroup.GroupID}, this.Request.Url.Scheme)
+                            additional = this.Url.Action("Group", "Home", new {id = newgroup.GroupID})
                         });
             }
             else

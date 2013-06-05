@@ -236,7 +236,7 @@ namespace MyCommunity.Controllers
                     new
                         {
                             state = "Success",
-                            additional = this.Url.Action("Group", "Home", new {id = 1}, this.Request.Url.Scheme)
+                            additional = this.Url.Action("Group", "Home", new {id = newgroup.GroupID}, this.Request.Url.Scheme)
                         });
             }
             else
@@ -269,7 +269,7 @@ namespace MyCommunity.Controllers
                     new
                     {
                         state = "Success",
-                        additional = this.Url.Action("Event", "Home", new { id = 1 }, this.Request.Url.Scheme)
+                        additional = this.Url.Action("Event", "Home", new { id = newgroup.EventID }, this.Request.Url.Scheme)
                     });
             }
             else
@@ -304,7 +304,7 @@ namespace MyCommunity.Controllers
                     new
                     {
                         state = "Success",
-                        additional = this.Url.Action("Event", "Home", new { id = 1 }, this.Request.Url.Scheme)
+                        additional = this.Url.Action("Event", "Home", new { id = newgroup.EventID }, this.Request.Url.Scheme)
                     });
             }
             else
@@ -339,7 +339,7 @@ namespace MyCommunity.Controllers
                     new
                     {
                         state = "Success",
-                        additional = this.Url.Action("Event", "Home", new { id = 1 }, this.Request.Url.Scheme)
+                        additional = this.Url.Action("Event", "Home", new { id = newgroup.EventID }, this.Request.Url.Scheme)
                     });
             }
             else
@@ -372,7 +372,7 @@ namespace MyCommunity.Controllers
                     new
                     {
                         state = "Success",
-                        additional = this.Url.Action("Campaign", "Home", new { id = 1 }, this.Request.Url.Scheme)
+                        additional = this.Url.Action("Campaign", "Home", new { id = newcampaign.CampaignID }, this.Request.Url.Scheme)
                     });
             }
             else

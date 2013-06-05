@@ -12,9 +12,6 @@
 <!--<hgroup class="title">
     <h1>@ViewBag.Title.</h1>
 </hgroup>-->
-<hgroup class="title">
-    <h2>Log in to your community</h2>
-</hgroup>
 <section id="loginForm">
 
 @using (Html.BeginForm(new { ReturnUrl = ViewBag.ReturnUrl })) {
@@ -22,7 +19,7 @@
     @Html.ValidationSummary(true)
 
     <fieldset>
-        <legend>Log in Form</legend>
+        <legend>Log in to your community</legend>
         <ol>
             <li>
                 @Html.LabelFor(m => m.UserName)

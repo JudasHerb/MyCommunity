@@ -1,38 +1,46 @@
 ﻿@model MyCommunity.ViewModels.CreateGroupEventViewModel
 
 <script>
-    $("#submitGroup14").button().click(function (event) {
-        event.preventDefault();
-        var name = $("#Name").val();
-        var date = $("#Date").val();
-        
-        
-        $.ajax({
-            type: "POST",
-            url: "/Home/CreateGroupEvent",
-            data: { "name": name, "date":date, "groupId":@Model.GroupID },
-            success: function (data) {
-                
-                if (data.state == "Success") {
-                    $("#newEvemtPopup").dialog("close");
-                    $(location).attr("href", data.additional);
-                }
-                else {
-                    alert(data.additional);
-                }
-            },
-            error: function(data) {
-                $(this).closest("#newEventPopup").dialog("close");
+    $(function() {
+
+        $("#Date").datepicker(
+            {
+                dateFormat:"dd/mm/yy"
             }
+        );
+        $("#submite").button().click(function(event) {
+            event.preventDefault();
+            var name = $("#Name").val();
+            var date = $("#Date").val();
+
+
+            $.ajax({
+                type: "POST",
+                url: "/Home/CreateGroupEvent",
+                data: { "name": name, "date": date, "groupId": @Model.GroupID },
+                success: function(data) {
+
+                    if (data.state == "Success") {
+                        $("#newEvemtPopup").dialog("close");
+                        $(location).attr("href", data.additional);
+                    } else {
+                        alert(data.additional);
+                    }
+                },
+                error: function(data) {
+                    $(this).closest("#newEventPopup").dialog("close");
+                }
+            });
         });
     });
+    
 </script>
 
 @using (Html.BeginForm()) {
     @Html.AntiForgeryToken()
 
     <fieldset>
-        <legend>Create Event</legend>
+        <legend>Enter details</legend>
         <ol>
             <li>
                 @Html.LabelFor(m => m.Name)
@@ -40,11 +48,11 @@
             </li>
             <li>
                 @Html.LabelFor(m => m.Date)
-                @Html.TextBoxFor(m => m.Date)
+                @Html.TextBoxFor(m => m.Date, new{@readonly="readonly"})
             </li>
             
         </ol>
-        <input id="submitGroup14" type="submit" value="Save" />
+        <input id="submite" type="submit" value="Save" />
     </fieldset>
 }
 

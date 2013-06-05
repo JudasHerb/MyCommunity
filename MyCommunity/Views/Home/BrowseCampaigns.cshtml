@@ -3,6 +3,10 @@
     $(function () {
         $("#newCampaignPopup").dialog({
             autoOpen: false,
+            modal: true,
+            width: 567,
+            height: 328,
+            title: "Create a campaign",
             open: function (event, ui) {
                 $(this).load("@Url.Action("CreateCampaignPartial")");
             }
@@ -13,15 +17,30 @@
         });
 </script>
 @{
-    ViewBag.Title = "BrowseCampaigns";
+    ViewBag.Title = "Campaigns";
 }
 
-<h2>BrowseCampaigns</h2>
+<table style="width:100%">
+    <tr>
+        <td>
+            <h2>Campaigns</h2>
+        </td>
+        <td >
+            <button style="float:right"  id="newCampaignButton">Create Campaign</button>
+        </td>
+    </tr>
+</table>
+
 @foreach (var camp in Model.Campaigns)
 {
-    <p> @camp.Value - 
-    @Html.ActionLink("Join","JoinCampaign",new {id=camp.Key})</p>
+        <div class="ui-corner-all" style="border:1px solid darkgray;padding:5px;margin-top:3px;">
+        <h3>@Html.ActionLink(@camp.Name,"Campaign",new {id=camp.Id})</h3>
+        
+        <p>(@camp.Members.Count.ToString() members, @camp.Evts.Count.ToString() events)</p>
+        <p>@camp.Description</p>
+        
+    </div>
 }
-<button id="newCampaignButton">Create Campaign</button>
+
 <div id="newCampaignPopup" title="Dialog Title"></div>
     

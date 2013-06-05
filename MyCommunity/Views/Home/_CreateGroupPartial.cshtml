@@ -1,7 +1,7 @@
 ﻿@model MyCommunity.ViewModels.CreateGroupViewModel
 
 <script>
-    $("#submitGroup").button().click( function(event) {
+    $("#submit").button().click( function(event) {
         event.preventDefault();
         var name = $("#Name").val();
         var description = $("#Description").val();
@@ -32,7 +32,7 @@
     @Html.AntiForgeryToken()
 
     <fieldset>
-        <legend>Create Group</legend>
+        <legend>Enter details</legend>
         <ol>
             <li>
                 @Html.LabelFor(m => m.Name)
@@ -48,7 +48,7 @@
 
             </li>
         </ol>
-        <input id="submitGroup" type="submit" value="Save" />
+        <input id="submit" type="submit" value="Save" />
     </fieldset>
 }
 

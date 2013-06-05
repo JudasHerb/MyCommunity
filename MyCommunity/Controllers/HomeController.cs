@@ -75,12 +75,14 @@ namespace MyCommunity.Controllers
         public ActionResult CommentGroup(int id, string comment)
         {
             var target = _unitOfWork.UsersRepository.CurrentUser().Groups.Where(g => g.GroupID == id).FirstOrDefault();
+            
             if (target != null)
             {
-                target.Messages.Add(new Message { Content = comment });
+                var msg = new Message {Content = comment};
+                target.Messages.Add(msg);
                 _unitOfWork.Save();
 
-                 return Json(new { state = "Success", additional = comment });
+                 return PartialView("_MessagePartial", new MessageViewModel(msg));
             }
             else
             {
@@ -89,15 +91,35 @@ namespace MyCommunity.Controllers
             
         }
         [HttpPost]
+        public ActionResult CommentEvent(int id, string comment)
+        {
+            var target = _unitOfWork.EventsRepository.FindBy(e=>e.EventID==id).FirstOrDefault();
+
+            if (target != null)
+            {
+                var msg = new Message { Content = comment };
+                target.Messages.Add(msg);
+                _unitOfWork.Save();
+
+                return PartialView("_MessagePartial", new MessageViewModel(msg));
+            }
+            else
+            {
+                return Json(new { state = "Fail", additional = comment });
+            }
+
+        }
+        [HttpPost]
         public ActionResult CommentCampaign(int id, string comment)
         {
             var target = _unitOfWork.UsersRepository.CurrentUser().Campaigns.Where(g => g.CampaignID == id).FirstOrDefault();
             if (target != null)
             {
-                target.Messages.Add(new Message { Content = comment });
+                var msg = new Message { Content = comment };
+                target.Messages.Add(msg);
                 _unitOfWork.Save();
 
-                return Json(new { state = "Success", additional = comment });
+                return PartialView("_MessagePartial", new MessageViewModel(msg));
             }
             else
             {
@@ -269,7 +291,7 @@ namespace MyCommunity.Controllers
                 var newgroup = new Events
                 {
                     Name = group.Name,
-                    DateTime = group.Date
+                    DateTime = DateTime.Parse(group.Date)
 
                 };
 
@@ -304,7 +326,7 @@ namespace MyCommunity.Controllers
                 var newgroup = new Events
                 {
                     Name = group.Name,
-                    DateTime = group.Date
+                    DateTime = DateTime.Parse(group.Date)
 
                 };
 
@@ -366,12 +388,12 @@ namespace MyCommunity.Controllers
             if (ModelState.IsValid)
             {
                 var user = _unitOfWork.UsersRepository.CurrentUser();
-
-                user.Community.Messages.Add(new Message {Content = comment, From = user, Title = "Test"});
+                var msg = new Message {Content = comment, From = user, Title = "Test"};
+                user.Community.Messages.Add(msg);
                 
                 _unitOfWork.Save();
 
-                return Json(new { state = "Success", additional = comment });
+                return PartialView("_MessagePartial", new MessageViewModel(msg));
             }
             else
             {

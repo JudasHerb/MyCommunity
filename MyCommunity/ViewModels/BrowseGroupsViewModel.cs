@@ -10,12 +10,12 @@ namespace MyCommunity.ViewModels
     {
         public BrowseGroupsViewModel(IList<Groups> campaigns)
         {
-            Groups = new Dictionary<int, string>();
-            foreach (var camp in campaigns)
+            Groups = new List<GroupViewModel>();
+            foreach (var grp in campaigns)
             {
-                Groups.Add(camp.GroupID, camp.Name);
+                Groups.Add(new GroupViewModel(grp));
             }
         }
-        public Dictionary<int, string> Groups { get; set; }
+        public List<GroupViewModel> Groups { get; set; }
     }
 }

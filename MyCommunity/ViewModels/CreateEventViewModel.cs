@@ -8,6 +8,8 @@ namespace MyCommunity.ViewModels
 {
     public class CreateEventViewModel
     {
+
+
         [Required]
         public string Name { get; set; }
         [Required]

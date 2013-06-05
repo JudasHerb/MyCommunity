@@ -11,7 +11,7 @@ namespace MyCommunity.ViewModels
         [Required]
         public string Name { get; set; }
         [Required]
-        public DateTime Date { get; set; }
+        public string Date { get; set; }
 
         public int CampaignID { get; set; }
     }

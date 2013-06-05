@@ -3,6 +3,10 @@
     $(function () {
         $("#newEventPopup").dialog({
             autoOpen: false,
+            modal: true,
+            width:375,
+            height: 315,
+            title:"Create an event",
             open: function (event, ui) {
                 $(this).load("@Url.Action("CreateEventPartial")");
             }
@@ -13,15 +17,34 @@
     });
     </script>
 @{
-    ViewBag.Title = "BrowseEvents";
+    ViewBag.Title = "Communit Events";
 }
 
-<h2>BrowseEvents</h2>
-@foreach (var camp in Model.Evts)
+
+<table style="width:100%">
+    <tr>
+        <td>
+            <h2>Community Events</h2>
+        </td>
+        <td >
+            <button style="float:right" id="newEventButton">Create Event</button>
+        </td>
+    </tr>
+</table>
+
+@foreach (var camp in Model.Events)
 {
-    <p> @camp.Value</p>
+    <div class="ui-corner-all" style="border:1px solid darkgray;padding:5px;margin-top:3px;">
+        <h3>@Html.ActionLink(string.Format("{0} - {1}",@camp.Date ,@camp.Name),"Event",new {id=camp.Id})</h3>
+        <p>Location: @camp.Location</p>
+        
+        <p>@camp.Description</p>
+        
+    </div>
+    
+
 }
-<button id="newEventButton">Create Event</button>
+
 
     <div id="newEventPopup" title="Dialog Title"></div>
     

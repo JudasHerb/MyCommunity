@@ -3,6 +3,10 @@
     $(function () {
         $("#newGroupPopup").dialog({
             autoOpen: false,
+            modal: true,
+            width: 569,
+            height: 382,
+            title: "Create a group",
             open: function (event, ui) {
                 $(this).load("@Url.Action("CreateGroupPartial")");
             }
@@ -13,14 +17,29 @@
         });
 </script>
 @{
-    ViewBag.Title = "BrowseGroups";
+    ViewBag.Title = "Public Groups";
 }
+<table style="width:100%">
+    <tr>
+        <td>
+            <h2>Public Groups</h2>
+        </td>
+        <td >
+            <button style="float:right" id="newGroupButton">Create Group</button>
+        </td>
+    </tr>
+</table>
 
-<h2>BrowseGroups</h2>
+
 @foreach (var camp in Model.Groups)
 {
-    <p> @camp.Value - 
-    @Html.ActionLink("Join","JoinGroup",new {id=camp.Key})</p>
+    <div class="ui-corner-all" style="border:1px solid darkgray;padding:5px;margin-top:3px;">
+        <h3>@Html.ActionLink(@camp.Name,"Group",new {id=camp.Id})</h3>
+        
+        <p>(@camp.Members.Count.ToString() members)</p>
+        <p>@camp.Description</p>
+        
+    </div>
 }
-<button id="newGroupButton">Create Group</button>
+
 <div id="newGroupPopup" title="Dialog Title"></div>

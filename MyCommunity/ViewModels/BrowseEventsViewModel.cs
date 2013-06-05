@@ -10,14 +10,14 @@ namespace MyCommunity.ViewModels
     {
         public BrowseEventsViewModel(IList<Events> events)
         {
-            Evts = new Dictionary<int, string>();
+            Events = new List<EventViewModel>();
             foreach (var evt in events)
             {
-                Evts.Add(evt.EventID, evt.Name);
+                Events.Add(new EventViewModel(evt));
             }
         }
 
-        public Dictionary<int, string> Evts { get; set; }
+        public List<EventViewModel> Events { get; set; }
 
     }
 }

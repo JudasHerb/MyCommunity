@@ -10,8 +10,22 @@ namespace MyCommunity.ViewModels
     {
         public EventViewModel(Events evt)
         {
-            Name = evt.Name;
+            Id = evt.EventID;
+            Name = evt.Name??"None";
+            Messages = new MessagesViewModel(evt.Messages.ToList());
+            Date = evt.DateTime.ToShortDateString();
+            Location = evt.Location?? "Unknown";
+            Description = evt.Description ?? "None";
         }
+        public int Id { get; set; }
         public string Name { get; set; }
+        public string Date { get; set; }
+        public string Location { get; set; }
+        public string Description { get; set; }
+        public MessagesViewModel Messages { get; set; }
     }
 }
+
+    
+    
+        

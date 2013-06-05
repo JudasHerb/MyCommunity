@@ -1,18 +1,21 @@
 ﻿@model MyCommunity.ViewModels.CreateEventViewModel
 
 <script>
-
-    $("#submitGroup12").button().click(function (event) {
-        event.preventDefault();
+    $(function () {
+        
+        $("#Date").datepicker();
+        
+        $("#submit").button().click(function (event) {
+            event.preventDefault();
             var name = $("#Name").val();
             var date = $("#Date").val();
-        
+
 
             $.ajax({
                 type: "POST",
                 url: "/Home/CreateEvent",
                 data: { "name": name, "date": date },
-                success: function(data) {
+                success: function (data) {
 
                     if (data.state == "Success") {
                         $("#newEventPopup").dialog("close");
@@ -21,19 +24,21 @@
                         alert(data.additional);
                     }
                 },
-                error: function(data) {
+                error: function (data) {
                     $(this).closest("#newEventPopup").dialog("close");
                 }
             });
         });
 
+    });
+    
 </script>
 
 @using (Html.BeginForm()) {
     @Html.AntiForgeryToken()
 
     <fieldset>
-        <legend>Create Event</legend>
+        <legend>Enter details</legend>
         <ol>
             <li>
                 @Html.LabelFor(m => m.Name)
@@ -41,11 +46,11 @@
             </li>
             <li>
                 @Html.LabelFor(m => m.Date)
-                @Html.TextBoxFor(m => m.Date)
+                @Html.TextBoxFor(m => m.Date, new{@readonly="readonly"})
             </li>
             
         </ol>
-        <input id="submitGroup12" type="submit" value="Save" />
+        <input id="submit" type="submit" value="Save" />
     </fieldset>
 }
 

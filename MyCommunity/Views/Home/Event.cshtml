@@ -1,6 +1,67 @@
 ﻿@model MyCommunity.ViewModels.EventViewModel
+<script>
+    $(function() {
+        $('#submit').button().click(function(event) {
+            var comment = $("#comment").val();
+            
+            $.ajax({
+                url: "/Home/CommentEvent",
+                type: "POST",
+                data: { "comment": comment, "id": @Model.Id },
+                success: function(data) {
+                    
+                    var els = $("#comments").find('div');
+                    if (els.length > 4) {
+                        els.last().remove();
+                    }
+
+                    $('#comments').prepend(data);
+                    $("#comment").val(null);
+
+                },
+                error: function(data) {
+                    alert('Oops. Something wnet wrong!');
+                }
+            });
+            return false;
+        });
+    });
+
+</script>
 @{
     ViewBag.Title = "Event";
 }
+<h2>@Model.Date -  @Model.Name</h2>
+         <h3>@Model.Location</h3>
+<table>
+ <tr>
+ <td style="width:300px;vertical-align:top;">
+     <div class="ui-corner-all" style="border:1px solid darkgray;padding:5px;">
+         <p>Description:</p>
+         <p> @Model.Description</p>
+     </div>
+ </td>
+ <td>
+     @using (Html.BeginForm("CommentEvent", "Home"))
+     {
+         @Html.AntiForgeryToken()
 
-<h2>@Model.Name</h2>
+         <fieldset>
+             <legend>Post a comment</legend>
+             <ol>
+                 <li>
+                     <textarea  name="comment " id="comment" rows="4" ></textarea>
+                 </li>
+             </ol>
+             <input id="submit" type="submit" value="Post" />
+         </fieldset>
+     }
+     <div id="comments">
+         @foreach (var comment in Model.Messages.Messages)
+         {
+
+             Html.RenderPartial("_MessagePartial", comment);
+
+         }</div></td>
+ </tr>
+    </table>

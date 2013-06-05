@@ -25,7 +25,9 @@ body {
     margin: 10px;
 }
 
-
+.ui-accordion-content p {
+    font-size: small;   
+}
 a {
   
     outline: none;
@@ -404,13 +406,14 @@ aside {
 
 /* forms */
 fieldset {
-    border: none;
+    border: 1px solid darkgray ;
     margin: 0;
-    padding: 0;
+    padding: 10px;
+    -moz-border-radius: 4px; -webkit-border-radius: 4px;
 }
 
     fieldset legend {
-        display: none;
+        
     }
 
     fieldset ol {
@@ -421,6 +424,9 @@ fieldset {
         fieldset ol li {
             padding-bottom: 5px;
         }
+        fieldset #submit { float: right;}
+        fieldset #submite { float: right;}
+        fieldset #submitf { float: right;}
 
 label {
     display: block;

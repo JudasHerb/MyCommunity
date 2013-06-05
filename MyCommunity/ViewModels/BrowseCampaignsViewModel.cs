@@ -10,12 +10,12 @@ namespace MyCommunity.ViewModels
     {
         public BrowseCampaignsViewModel(IList<Campaigns> campaigns)
         {
-            Campaigns = new Dictionary<int, string>();
+            Campaigns = new List<CampaignViewModel>();
             foreach (var camp in campaigns)
             {
-                Campaigns.Add(camp.CampaignID, camp.Name);
+                Campaigns.Add(new CampaignViewModel(camp));
             }
         }
-        public Dictionary<int, string> Campaigns { get; set; }
+        public List<CampaignViewModel> Campaigns { get; set; }
     }
 }

@@ -6,5 +6,5 @@
 <h2>Messages</h2>
 @foreach (var msg in Model.Messages)
 {
-    <p>@msg.Message</p>
+    Html.RenderPartial("_MessagePartial", msg);
 }

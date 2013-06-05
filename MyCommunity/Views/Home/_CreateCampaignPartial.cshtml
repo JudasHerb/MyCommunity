@@ -1,7 +1,7 @@
 ﻿@model MyCommunity.ViewModels.CreateCampaignViewModel
 
 <script>
-    $("#submitGroup13").button().click(function (event) {
+    $("#submit").button().click(function (event) {
         event.preventDefault();
         var name = $("#Name").val();
         var description = $("#Description").val();
@@ -43,7 +43,7 @@
                 @Html.TextAreaFor(m => m.Description)
             </li>
         </ol>
-        <input id="submitGroup13" type="submit" value="Save" />
+        <input id="submit" type="submit" value="Save" />
     </fieldset>
 }
 

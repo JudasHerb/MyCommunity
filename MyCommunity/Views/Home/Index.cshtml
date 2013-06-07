@@ -59,24 +59,22 @@
             }
                 
                 
-                <p style="float:right">@Html.ActionLink("Browse", "Messages")</p>
-        </div>
-        <h3>@Html.ActionLink("My Councillors", "Councillors")</h3>
-        <div>
-            <p>
-              Contact community contact to update or add councillors    
-            <p>
-
-        </div>
-        <h3>@Html.ActionLink("My MP", "MP")</h3>
-        <div>
-            <p>
-              Contact community contact to update or add MPs    
-            <p>
+            <p style="float:right">@Html.ActionLink("Browse", "Messages")</p>
         </div>
         <h3>@Html.ActionLink("My Neighbours", "Neighbours")</h3>
         <div>
-            <p>TBD</p>
+             @if (Model.Neightbours.Count == 0)
+             {
+                 <p>You don't have any neighbours. Spread the word!</p>
+             }
+             else
+             {
+                 foreach (var group in Model.Neightbours)
+                 {
+                     <p >@Html.ActionLink(group.Value, "Neighbour", new {id = group.Key})</p>
+                 }
+             }
+            <p style="float:right">@Html.ActionLink("Browse", "Neighbours")</p>
         </div>
         <h3>Community Events</h3>
         <div>
@@ -133,6 +131,21 @@
                 
             <p style="float:right">@Html.ActionLink("Browse", "BrowseCampaigns")</p>
         </div>
+        <h3>@Html.ActionLink("My Councillors", "Councillors")</h3>
+        <div>
+            <p>
+              Contact community contact to update or add councillors    
+            <p>
+
+        </div>
+        <h3>@Html.ActionLink("My MP", "MP")</h3>
+        <div>
+            <p>
+              Contact community contact to update or add MPs    
+            <p>
+        </div>
+        
+        
     </div>        
         </td>
         <td style="vertical-align:top" >

@@ -27,10 +27,22 @@ namespace MyCommunity.DataAccess
 
         public DbSet<UserProfile> UserProfiles { get; set; }
         public DbSet<Community> Communities { get; set; }
-        public DbSet<Campaigns> Campaigns { get; set; }
-        public DbSet<Groups> Groups { get; set; }
-        public DbSet<Events> Events { get; set; }
-    
+        public DbSet<Campaign> Campaigns { get; set; }
+        public DbSet<Group> Groups { get; set; }
+        public DbSet<Event> Events { get; set; }
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<Group>().HasRequired(g=>g.Community).WithMany(c=>c.Groups).HasForeignKey(c=>c.CommunityID).WillCascadeOnDelete(false);
+            modelBuilder.Entity<Campaign>().HasRequired(g => g.Community).WithMany(c => c.Campaigns).HasForeignKey(c => c.CommunityID).WillCascadeOnDelete(false);
+            //modelBuilder.Entity<UserProfile>().HasRequired(g => g.Community).WithMany(c => c.Members).HasForeignKey(c => c.CommunityID).WillCascadeOnDelete(false);
+ 
+
+            
+
+            
+        }
 
         #region IUnitOfWork Members
   

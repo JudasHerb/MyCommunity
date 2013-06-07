@@ -8,7 +8,7 @@ namespace MyCommunity.ViewModels
 {
     public class CouncillorsViewModel
     {
-        public CouncillorsViewModel(List<Councillors> councillors)
+        public CouncillorsViewModel(List<Councillor> councillors)
         {
             Councillors = new List<CouncillorViewModel>();
             foreach (var councillor in councillors)

@@ -8,7 +8,7 @@ namespace MyCommunity.ViewModels
 {
     public class BrowseEventsViewModel
     {
-        public BrowseEventsViewModel(IList<Events> events)
+        public BrowseEventsViewModel(IList<Event> events)
         {
             Events = new List<EventViewModel>();
             foreach (var evt in events)

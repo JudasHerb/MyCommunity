@@ -8,24 +8,24 @@ namespace MyCommunity.ViewModels
 {
     public class CampaignViewModel
     {
-        public CampaignViewModel(Campaigns campaigns)
+        public CampaignViewModel(Campaign campaigns)
         {
             Name = campaigns.Name;
             Messages = new MessagesViewModel(campaigns.Messages.Take(5).ToList());
             Evts = new Dictionary<int, string>();
             Members = new Dictionary<int, string>();
-            Id = campaigns.Id;
+            Id = campaigns.CampaignId;
             foreach (var evt in campaigns.Events)
             {
                 if (evt.Name.Length > 10)
                 {
                     var summary = string.Format("{0}: {1} ...", evt.DateTime.ToShortDateString(), evt.Name.Substring(0, 10));
-                    Evts.Add(evt.Id, summary);
+                    Evts.Add(evt.EventId, summary);
                 }
                 else
                 {
                     var summary = string.Format("{0}: {1}", evt.DateTime.ToShortDateString(), evt.Name);
-                    Evts.Add(evt.Id, summary);
+                    Evts.Add(evt.EventId, summary);
                 }
 
             }

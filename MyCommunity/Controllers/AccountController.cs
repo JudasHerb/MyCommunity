@@ -89,7 +89,7 @@ namespace MyCommunity.Controllers
                 {
                     var community = _unitOfWork.CommunitiesRepository.GetAll().First();
 
-                    WebSecurity.CreateUserAndAccount(model.Email, model.Password, new{FirstName=model.FirstName,LastName=model.LastName,Address=model.Address});
+                    WebSecurity.CreateUserAndAccount(model.Email, model.Password, new{FirstName=model.FirstName,LastName=model.LastName,Address=model.Address, CommunityId=community.CommunityId});
                     
                     WebSecurity.Login(model.Email, model.Password);
 

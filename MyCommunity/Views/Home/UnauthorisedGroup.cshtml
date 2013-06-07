@@ -1,5 +1,58 @@
-﻿@{
-    ViewBag.Title = "UnauthorisedGroup";
+﻿@model MyCommunity.ViewModels.GroupViewModel
+<script>
+    $(function () {
+        $('#mnu').accordion({
+            heightStyle: "content",
+            collapsible:true
+        });
+     });
+   
+</script>
+@{
+    ViewBag.Title = "Group";
 }
 
-<h2>UnauthorisedGroup</h2>
+<table style="width:100%">
+    <tr>
+        <td>
+            <h2>@Model.Name</h2>
+        </td>
+        <td >
+            <div style="float:right" id="newEventButton">@Html.ActionLink("Join Group","JoinGroup",new {id=Model.Id})</div>
+        </td>
+    </tr>
+</table>
+<h3>@Model.Description</h3>
+<table>
+ <tr>
+ <td style="width:300px;vertical-align:top;">
+      <div id="mnu">
+        <h3>Events</h3>
+          <div>
+ 
+    
+              @foreach (var group in Model.Evts)
+              {
+                  <p>@group.Value</p>
+              }
+    
+          </div>
+          <h3>Members</h3>
+      <div>
+ 
+     @foreach (var group in Model.Members)
+              {
+                  <p>@group.Value</p>
+              }
+      </div>
+          </div>
+<div id="newEventPopup" title="Dialog Title"></div>
+ </td>
+     <td>
+         <div style="width:500px;" id="comments">
+         @foreach (var comment in Model.Messages.Messages)
+         {
+             Html.RenderPartial("_MessagePartial", comment);
+         }
+     </div>
+         </td></tr></table>

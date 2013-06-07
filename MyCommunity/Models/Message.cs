@@ -11,9 +11,9 @@ namespace MyCommunity.Models
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
+        public int MessageId { get; set; }
         public string Title { get; set; }
         public string Content { get; set; }
-        public UserProfile From { get; set; }
+        public string From { get; set; }
     }
 }

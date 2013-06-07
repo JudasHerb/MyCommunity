@@ -11,8 +11,10 @@ namespace MyCommunity.Models
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
+        public int MPId { get; set; }
         public string Name { get; set; }
         public string Email { get; set; }
+        public int CommunityID { get; set; }
+
     }
 }

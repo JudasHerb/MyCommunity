@@ -31,13 +31,13 @@ namespace MyCommunity.Migrations
 
                 if (!WebSecurity.UserExists("david.garratt.little@gmail.com"))
                 {
-                    WebSecurity.CreateUserAndAccount("david.garratt.little@gmail.com", "B0110cks!", new {FirstName="David", LastName="Little", Address="14 Craignair Avenue"},false);
-
-                    var judas = context.UsersRepository.FindBy(m => m.Email == "david.garratt.little@gmail.com").First();
-                    var commnunity = new Community { Name = "Patcham", Administrator = judas };
-                    commnunity.Members.Add(judas);
-                    judas.Community = commnunity;
+                    var commnunity = new Community { Name = "Patcham" };
                     context.Communities.AddOrUpdate(c => c.Name, commnunity);
+                    context.Save();
+                    WebSecurity.CreateUserAndAccount("david.garratt.little@gmail.com", "B0110cks!", new { FirstName = "David", LastName = "Little", Address = "14 Craignair Avenue", CommunityID = commnunity.CommunityId }, false);
+
+                    
+                    
                 }
 
 

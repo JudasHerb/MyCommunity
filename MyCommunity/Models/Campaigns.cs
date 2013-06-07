@@ -8,22 +8,24 @@ using System.Web;
 
 namespace MyCommunity.Models
 {
-    public class Campaigns 
+    public class Campaign 
     {
-        public Campaigns()
+        public Campaign()
         {
-            Messages = new Collection<Message>();
-            Members = new Collection<UserProfile>();
-            Events = new Collection<Events>();
+            Messages = new HashSet<Message>();
+            Members = new HashSet<UserProfile>();
+            Events = new HashSet<Event>();
         }
 
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
+        public int CampaignId { get; set; }
         public virtual ICollection<Message> Messages { get; set; }
         public virtual ICollection<UserProfile> Members { get; set; }
-        public virtual ICollection<Events> Events { get; set; }
+        public virtual ICollection<Event> Events { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
+        public int CommunityID { get; set; }
+        public virtual Community Community { get; set; }
     }
 }

@@ -8,22 +8,25 @@ using System.Web;
 
 namespace MyCommunity.Models
 {
-    public class Events 
+    public class Event 
     {
-        public Events()
+        public Event()
         {
-            Messages = new Collection<Message>();
+            Messages = new HashSet<Message>();
             
         }
 
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
+        public int EventId { get; set; }
+
         public virtual ICollection<Message> Messages { get; set; }
         
         public string Name { get; set; }
         public string Description { get; set; }
         public DateTime DateTime { get; set; }
         public string Location { get; set; }
+
+  
     }
 }

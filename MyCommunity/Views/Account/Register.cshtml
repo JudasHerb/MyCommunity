@@ -1,4 +1,10 @@
 ﻿@model MyCommunity.Models.RegisterModel
+<script>
+    $(function () {
+        $('#submit').button();
+    });
+
+</script>
 @{
     ViewBag.Title = "Register";
 }
@@ -40,7 +46,7 @@
                 @Html.PasswordFor(m => m.ConfirmPassword)
             </li>
         </ol>
-        <input type="submit" value="Register" />
+        <input id="submit" type="submit" value="Register" />
     </fieldset>
 }
 

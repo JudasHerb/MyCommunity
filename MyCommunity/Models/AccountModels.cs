@@ -14,9 +14,9 @@ namespace MyCommunity.Models
     {
         public UserProfile()
         {
-            Messages = new Collection<Message>();
-            Groups = new Collection<Groups>();
-            Campaigns = new Collection<Campaigns>();
+            Messages = new HashSet<Message>();
+            Groups = new HashSet<Group>();
+            Campaigns = new HashSet<Campaign>();
         }
 
         [Key]
@@ -33,12 +33,14 @@ namespace MyCommunity.Models
 
         public string DisplayName { get { return string.Format("{0} {1}", FirstName, LastName); } }
 
+        //foreign key
+        public int CommunityID { get; set; }
 
+        //navigation
         public virtual Community Community { get; set; }
-
         public virtual ICollection<Message> Messages { get; set; }
-        public virtual ICollection<Groups> Groups { get; set; }
-        public virtual ICollection<Campaigns> Campaigns { get; set; }
+        public virtual ICollection<Group> Groups { get; set; }
+        public virtual ICollection<Campaign> Campaigns { get; set; }
         
     }
 

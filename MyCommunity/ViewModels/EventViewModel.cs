@@ -8,9 +8,9 @@ namespace MyCommunity.ViewModels
 {
     public class EventViewModel
     {
-        public EventViewModel(Events evt)
+        public EventViewModel(Event evt)
         {
-            Id = evt.Id;
+            Id = evt.EventId;
             Name = evt.Name??"None";
             Messages = new MessagesViewModel(evt.Messages.ToList());
             Date = evt.DateTime.ToShortDateString();

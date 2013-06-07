@@ -13,36 +13,31 @@ namespace MyCommunity.Models
     {
         public Community()
         {
-            Groups = new Collection<Groups>();
-            Members = new Collection<UserProfile>();
-            Campaigns = new Collection<Campaigns>();
-            Events = new Collection<Events>();
-            Messages = new Collection<Message>();
+            Groups = new HashSet<Group>();
+            Members = new HashSet<UserProfile>();
+            Campaigns = new HashSet<Campaign>();
+            Events = new HashSet<Event>();
+            Messages = new HashSet<Message>();
         }
         [Key]
         [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
+        public int CommunityId { get; set; }
 
         [Required]
         public string Name { get; set; }
 
-        [Required]
-        public UserProfile Administrator { get; set; }
-
         public virtual ICollection<UserProfile> Members { get; set; }
 
-        public UserProfile Admin { get; set; }
+        public virtual ICollection<Group> Groups { get; set; }
 
-        public virtual ICollection<Groups> Groups { get; set; }
+        public virtual ICollection<Campaign> Campaigns { get; set; }
 
-        public virtual ICollection<Campaigns> Campaigns { get; set; }
-
-        public virtual ICollection<Events> Events { get; set; }
+        public virtual ICollection<Event> Events { get; set; }
 
         public virtual ICollection<Message> Messages { get; set; }
 
-        public virtual ICollection<Councillors> Councillors { get; set; }
+        public virtual ICollection<Councillor> Councillors { get; set; }
 
-        public MP MP { get; set; } 
+        public virtual MP MP { get; set; } 
     }
 }

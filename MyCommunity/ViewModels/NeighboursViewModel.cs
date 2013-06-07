@@ -10,14 +10,14 @@ namespace MyCommunity.ViewModels
     {
         public NeighboursViewModel(IList<UserProfile> members)
         {
-            Neighbours = new Dictionary<int, string>();
-            foreach (var user in members.Take(5))
+            Neighbours = new List<NeighbourViewModel>();
+            foreach (var user in members)
             {
-                Neighbours.Add(user.UserId, user.DisplayName);
+                Neighbours.Add(new NeighbourViewModel(user) );
             }
         }
 
-        public Dictionary<int, string> Neighbours { get; set; }
+        public List<NeighbourViewModel> Neighbours { get; set; }
     }
     
 }

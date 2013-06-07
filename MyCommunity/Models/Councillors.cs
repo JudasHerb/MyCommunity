@@ -7,12 +7,14 @@ using System.Web;
 
 namespace MyCommunity.Models
 {
-    public class Councillors
+    public class Councillor
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
+        public int CouncillorId { get; set; }
         public string Name { get; set; }
         public string Email { get; set; }
+        public int CommunityID { get; set; }
+        
     }
 }

@@ -4,7 +4,18 @@
 }
 
 <h2>Neighbours</h2>
+<br />
+
+
 @foreach (var n in Model.Neighbours)
 {
-    @Html.ActionLink(n.Value,"Neighbour", new {id=n.Key})
+        <div class="ui-corner-all" style="border:1px solid darkgray;padding:5px;margin-top:3px;">
+        <h3>@Html.ActionLink(@n.Name,"Neighbour",new {id=n.ID})</h3>
+        <p>Activity: </p>
+            <p>@n.Groups.ToString() groups</p>
+
+        <p>@n.Campaigns.ToString() campaigns</p>
+        
+    </div>
+    
 }

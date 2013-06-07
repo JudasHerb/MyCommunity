@@ -8,7 +8,7 @@ namespace MyCommunity.ViewModels
 {
     public class BrowseCampaignsViewModel
     {
-        public BrowseCampaignsViewModel(IList<Campaigns> campaigns)
+        public BrowseCampaignsViewModel(IList<Campaign> campaigns)
         {
             Campaigns = new List<CampaignViewModel>();
             foreach (var camp in campaigns)

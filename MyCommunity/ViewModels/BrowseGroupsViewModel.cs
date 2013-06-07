@@ -8,7 +8,7 @@ namespace MyCommunity.ViewModels
 {
     public class BrowseGroupsViewModel
     {
-        public BrowseGroupsViewModel(IList<Groups> campaigns)
+        public BrowseGroupsViewModel(IList<Group> campaigns)
         {
             Groups = new List<GroupViewModel>();
             foreach (var grp in campaigns)

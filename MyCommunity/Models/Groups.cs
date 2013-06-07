@@ -8,18 +8,18 @@ using System.Web;
 
 namespace MyCommunity.Models
 {
-    public class Groups
+    public class Group
     {
-        public Groups()
+        public Group()
         {
-            Members = new Collection<UserProfile>();
-            Events = new Collection<Events>();
-            Messages = new Collection<Message>();
+            Members = new HashSet<UserProfile>();
+            Events = new HashSet<Event>();
+            Messages = new HashSet<Message>();
         }
 
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
+        public int GroupId { get; set; }
 
         [Required]
         public string Name { get; set; }
@@ -30,8 +30,11 @@ namespace MyCommunity.Models
 
         public virtual ICollection<UserProfile> Members { get; set; }
 
-        public virtual ICollection<Events> Events { get; set; }
+        public virtual ICollection<Event> Events { get; set; }
 
         public virtual ICollection<Message> Messages { get; set; }
+
+        public int CommunityID { get; set; }
+        public virtual Community Community { get; set; }
     }
 }

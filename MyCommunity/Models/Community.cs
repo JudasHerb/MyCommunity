@@ -21,7 +21,7 @@ namespace MyCommunity.Models
         }
         [Key]
         [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
-        public int CommunityID { get; set; }
+        public int Id { get; set; }
 
         [Required]
         public string Name { get; set; }

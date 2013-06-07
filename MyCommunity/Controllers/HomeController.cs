@@ -50,7 +50,7 @@ namespace MyCommunity.Controllers
             var user = _unitOfWork.UsersRepository.FindBy(u => u.UserId == id).FirstOrDefault();
             if (user != null)
             {
-                return View(new NeighbourViewModel{Name=user.UserName, ID=user.UserId});
+                return View(new NeighbourViewModel{Name=user.DisplayName, ID=user.UserId});
             }
             else
             {
@@ -74,7 +74,7 @@ namespace MyCommunity.Controllers
         [HttpPost]
         public ActionResult CommentGroup(int id, string comment)
         {
-            var target = _unitOfWork.UsersRepository.CurrentUser().Groups.Where(g => g.GroupID == id).FirstOrDefault();
+            var target = _unitOfWork.UsersRepository.CurrentUser().Groups.Where(g => g.Id == id).FirstOrDefault();
             
             if (target != null)
             {
@@ -93,7 +93,7 @@ namespace MyCommunity.Controllers
         [HttpPost]
         public ActionResult CommentEvent(int id, string comment)
         {
-            var target = _unitOfWork.EventsRepository.FindBy(e=>e.EventID==id).FirstOrDefault();
+            var target = _unitOfWork.EventsRepository.FindBy(e=>e.Id==id).FirstOrDefault();
 
             if (target != null)
             {
@@ -112,7 +112,7 @@ namespace MyCommunity.Controllers
         [HttpPost]
         public ActionResult CommentCampaign(int id, string comment)
         {
-            var target = _unitOfWork.UsersRepository.CurrentUser().Campaigns.Where(g => g.CampaignID == id).FirstOrDefault();
+            var target = _unitOfWork.UsersRepository.CurrentUser().Campaigns.Where(g => g.Id == id).FirstOrDefault();
             if (target != null)
             {
                 var msg = new Message { Content = comment };
@@ -137,7 +137,7 @@ namespace MyCommunity.Controllers
 
         public ActionResult Event(int id)
         {
-            var evt =_unitOfWork.EventsRepository.FindBy(e => e.EventID == id).FirstOrDefault();
+            var evt =_unitOfWork.EventsRepository.FindBy(e => e.Id == id).FirstOrDefault();
             if (evt == null) RedirectToAction("Index");
             return View(new EventViewModel(evt));
         }
@@ -145,7 +145,7 @@ namespace MyCommunity.Controllers
         public ActionResult Group(int id)
         {
             var user = _unitOfWork.UsersRepository.CurrentUser();
-            var group = user.Community.Groups.Where(g => g.GroupID == id).FirstOrDefault();
+            var group = user.Community.Groups.Where(g => g.Id == id).FirstOrDefault();
 
             if (group == null) RedirectToAction("Index");
 
@@ -161,7 +161,7 @@ namespace MyCommunity.Controllers
         public ActionResult Campaign(int id)
         {
             var user = _unitOfWork.UsersRepository.CurrentUser();
-            var group = user.Community.Campaigns.Where(c => c.CampaignID == id).FirstOrDefault();
+            var group = user.Community.Campaigns.Where(c => c.Id == id).FirstOrDefault();
 
             if (group == null) RedirectToAction("Index");
 
@@ -236,7 +236,7 @@ namespace MyCommunity.Controllers
                     new
                         {
                             state = "Success",
-                            additional = this.Url.Action("Group", "Home", new {id = newgroup.GroupID})
+                            additional = this.Url.Action("Group", "Home", new {id = newgroup.Id})
                         });
             }
             else
@@ -269,7 +269,7 @@ namespace MyCommunity.Controllers
                     new
                     {
                         state = "Success",
-                        additional = this.Url.Action("Event", "Home", new { id = newgroup.EventID })
+                        additional = this.Url.Action("Event", "Home", new { id = newgroup.Id })
                     });
             }
             else
@@ -286,7 +286,7 @@ namespace MyCommunity.Controllers
             {
 
                 //var user = _unitOfWork.UsersRepository.CurrentUser();
-                var targetgroup = _unitOfWork.GroupsRepository.FindBy(g => g.GroupID == group.GroupID).FirstOrDefault();
+                var targetgroup = _unitOfWork.GroupsRepository.FindBy(g => g.Id == group.GroupID).FirstOrDefault();
 
                 var newgroup = new Events
                 {
@@ -304,7 +304,7 @@ namespace MyCommunity.Controllers
                     new
                     {
                         state = "Success",
-                        additional = this.Url.Action("Event", "Home", new { id = newgroup.EventID })
+                        additional = this.Url.Action("Event", "Home", new { id = newgroup.Id })
                     });
             }
             else
@@ -321,7 +321,7 @@ namespace MyCommunity.Controllers
             {
 
                 //var user = _unitOfWork.UsersRepository.CurrentUser();
-                var targetgroup = _unitOfWork.CampaignsRepository.FindBy(g => g.CampaignID == group.CampaignID).FirstOrDefault();
+                var targetgroup = _unitOfWork.CampaignsRepository.FindBy(g => g.Id == group.CampaignID).FirstOrDefault();
 
                 var newgroup = new Events
                 {
@@ -339,7 +339,7 @@ namespace MyCommunity.Controllers
                     new
                     {
                         state = "Success",
-                        additional = this.Url.Action("Event", "Home", new { id = newgroup.EventID })
+                        additional = this.Url.Action("Event", "Home", new { id = newgroup.Id })
                     });
             }
             else
@@ -372,7 +372,7 @@ namespace MyCommunity.Controllers
                     new
                     {
                         state = "Success",
-                        additional = this.Url.Action("Campaign", "Home", new { id = newcampaign.CampaignID })
+                        additional = this.Url.Action("Campaign", "Home", new { id = newcampaign.Id })
                     });
             }
             else
@@ -417,7 +417,7 @@ namespace MyCommunity.Controllers
 
         public ActionResult JoinCampaign(int Id)
         {
-            var campaign = _unitOfWork.CampaignsRepository.FindBy(c => c.CampaignID == Id).FirstOrDefault();
+            var campaign = _unitOfWork.CampaignsRepository.FindBy(c => c.Id == Id).FirstOrDefault();
             if (campaign != null)
             {
                 campaign.Members.Add(_unitOfWork.UsersRepository.CurrentUser());
@@ -427,7 +427,7 @@ namespace MyCommunity.Controllers
         }
         public ActionResult JoinGroup(int Id)
         {
-            var campaign = _unitOfWork.GroupsRepository.FindBy(c => c.GroupID == Id).FirstOrDefault();
+            var campaign = _unitOfWork.GroupsRepository.FindBy(c => c.Id == Id).FirstOrDefault();
             if (campaign != null)
             {
                 campaign.Members.Add(_unitOfWork.UsersRepository.CurrentUser());

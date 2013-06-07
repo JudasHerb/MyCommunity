@@ -17,7 +17,7 @@ namespace MyCommunity.DataAccess.Repositories
         public UserProfile CurrentUser()
         {
             var user = Membership.GetUser();
-            return FindBy(u => u.UserName == user.UserName).First();
+            return FindBy(u => u.Email == user.UserName).First();
         }
     }
 }

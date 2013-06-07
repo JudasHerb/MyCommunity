@@ -22,11 +22,11 @@ namespace MyCommunity.ViewModels
                 {
                     if (campaign.Name.Length > 10)
                     {
-                        Campaigns.Add(campaign.CampaignID, string.Format("{0} ...", campaign.Name.Substring(0, 10)));
+                        Campaigns.Add(campaign.Id, string.Format("{0} ...", campaign.Name.Substring(0, 10)));
                     }
                     else
                     {
-                        Campaigns.Add(campaign.CampaignID, campaign.Name);
+                        Campaigns.Add(campaign.Id, campaign.Name);
                     }
                     
                 }
@@ -36,13 +36,13 @@ namespace MyCommunity.ViewModels
                     var msgContent = msg.Content ?? "Empty";
                     if (msgContent.Length > 10)
                     {
-                        var summary = string.Format("{0}: {1} ...", msg.From.UserName, msgContent.Substring(0,10));
-                        Messages.Add(msg.MessageID, summary);
+                        var summary = string.Format("{0}: {1} ...", msg.From.DisplayName, msgContent.Substring(0,10));
+                        Messages.Add(msg.Id, summary);
                     }
                     else
                     {
-                        var summary = string.Format("{0}: {1}", msg.From.UserName, msgContent);
-                        Messages.Add(msg.MessageID, summary);
+                        var summary = string.Format("{0}: {1}", msg.From.DisplayName, msgContent);
+                        Messages.Add(msg.Id, summary);
                     }
                     
                 }
@@ -51,11 +51,11 @@ namespace MyCommunity.ViewModels
                 {
                     if (group.Name.Length > 10)
                     {
-                        Groups.Add(group.GroupID, string.Format("{0} ...", group.Name.Substring(0, 10)));
+                        Groups.Add(group.Id, string.Format("{0} ...", group.Name.Substring(0, 10)));
                     }
                     else
                     {
-                        Groups.Add(group.GroupID,  group.Name);
+                        Groups.Add(group.Id,  group.Name);
                     }
                     
                 }
@@ -65,17 +65,17 @@ namespace MyCommunity.ViewModels
                     if (evt.Name.Length > 10)
                     {
                         var summary = string.Format("{0}: {1} ...", evt.DateTime.ToShortDateString(), evt.Name.Substring(0, 10));
-                        Evts.Add(evt.EventID, summary);    
+                        Evts.Add(evt.Id, summary);    
                     }
                     else
                     {
                         var summary = string.Format("{0}: {1}" , evt.DateTime.ToShortDateString(), evt.Name);
-                        Evts.Add(evt.EventID, summary);    
+                        Evts.Add(evt.Id, summary);    
                     }
                     
                 }
             
-                Comments = new MessagesViewModel(user.Community.Messages.OrderByDescending(m => m.MessageID).Take(5).ToList());
+                Comments = new MessagesViewModel(user.Community.Messages.OrderByDescending(m => m.Id).Take(5).ToList());
             }
             else
             {

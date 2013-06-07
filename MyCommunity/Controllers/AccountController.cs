@@ -43,7 +43,7 @@ namespace MyCommunity.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Login(LoginModel model, string returnUrl)
         {
-            if (ModelState.IsValid && WebSecurity.Login(model.UserName, model.Password, persistCookie: model.RememberMe))
+            if (ModelState.IsValid && WebSecurity.Login(model.Email, model.Password, persistCookie: model.RememberMe))
             {
                 return RedirectToLocal(returnUrl);
             }
@@ -89,11 +89,11 @@ namespace MyCommunity.Controllers
                 {
                     var community = _unitOfWork.CommunitiesRepository.GetAll().First();
 
-                    WebSecurity.CreateUserAndAccount(model.UserName, model.Password);
+                    WebSecurity.CreateUserAndAccount(model.Email, model.Password, new{FirstName=model.FirstName,LastName=model.LastName,Address=model.Address});
                     
-                    WebSecurity.Login(model.UserName, model.Password);
+                    WebSecurity.Login(model.Email, model.Password);
 
-                    var user = _unitOfWork.UsersRepository.FindBy(u => u.UserName == model.UserName).First();
+                    var user = _unitOfWork.UsersRepository.FindBy(u => u.Email == model.Email).First();
                     user.Community = community;
                     community.Members.Add(user);
                     
@@ -283,12 +283,12 @@ namespace MyCommunity.Controllers
                 // Insert a new user into the database
                 using (UnitOfWork db = new UnitOfWork())
                 {
-                    UserProfile user = db.UserProfiles.FirstOrDefault(u => u.UserName.ToLower() == model.UserName.ToLower());
+                    UserProfile user = db.UserProfiles.FirstOrDefault(u => u.Email.ToLower() == model.UserName.ToLower());
                     // Check if user already exists
                     if (user == null)
                     {
                         // Insert name into the profile table
-                        db.UserProfiles.Add(new UserProfile { UserName = model.UserName });
+                        db.UserProfiles.Add(new UserProfile { Email = model.UserName });
                         db.SaveChanges();
 
                         OAuthWebSecurity.CreateOrUpdateAccount(provider, providerUserId, model.UserName);

@@ -26,19 +26,23 @@ namespace MyCommunity.Migrations
                 WebSecurity.InitializeDatabaseConnection("DefaultConnection",
                                                          "UserProfile",
                                                          "UserId",
-                                                         "UserName",
+                                                         "Email",
                                                          autoCreateTables: true);
 
-                if (!WebSecurity.UserExists("JudasHerb"))
+                if (!WebSecurity.UserExists("david.garratt.little@gmail.com"))
                 {
-                    WebSecurity.CreateUserAndAccount("JudasHerb", "B0110cks!");
+                    WebSecurity.CreateUserAndAccount("david.garratt.little@gmail.com", "B0110cks!", new {FirstName="David", LastName="Little", Address="14 Craignair Avenue"},false);
+
+                    var judas = context.UsersRepository.FindBy(m => m.Email == "david.garratt.little@gmail.com").First();
+                    var commnunity = new Community { Name = "Patcham", Administrator = judas };
+                    commnunity.Members.Add(judas);
+                    judas.Community = commnunity;
+                    context.Communities.AddOrUpdate(c => c.Name, commnunity);
                 }
+
+
             }
-            var judas = context.UsersRepository.FindBy(m => m.UserName == "JudasHerb").First();
-            var commnunity = new Community {Name = "Patcham", Administrator = judas};
-            commnunity.Members.Add(judas);
-            judas.Community = commnunity;
-            context.Communities.AddOrUpdate(c => c.Name, commnunity);
+            
             
             
 

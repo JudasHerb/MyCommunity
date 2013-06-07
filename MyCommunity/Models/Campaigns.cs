@@ -19,7 +19,7 @@ namespace MyCommunity.Models
 
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int CampaignID { get; set; }
+        public int Id { get; set; }
         public virtual ICollection<Message> Messages { get; set; }
         public virtual ICollection<UserProfile> Members { get; set; }
         public virtual ICollection<Events> Events { get; set; }

@@ -18,7 +18,7 @@ namespace MyCommunity.Models
 
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int EventID { get; set; }
+        public int Id { get; set; }
         public virtual ICollection<Message> Messages { get; set; }
         
         public string Name { get; set; }

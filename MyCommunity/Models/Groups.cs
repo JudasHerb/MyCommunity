@@ -19,7 +19,7 @@ namespace MyCommunity.Models
 
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int GroupID { get; set; }
+        public int Id { get; set; }
 
         [Required]
         public string Name { get; set; }

@@ -13,7 +13,7 @@ namespace MyCommunity.ViewModels
             Neighbours = new Dictionary<int, string>();
             foreach (var user in members.Take(5))
             {
-                Neighbours.Add(user.UserId, user.UserName);
+                Neighbours.Add(user.UserId, user.DisplayName);
             }
         }
 

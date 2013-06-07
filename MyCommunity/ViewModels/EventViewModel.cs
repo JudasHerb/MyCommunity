@@ -10,7 +10,7 @@ namespace MyCommunity.ViewModels
     {
         public EventViewModel(Events evt)
         {
-            Id = evt.EventID;
+            Id = evt.Id;
             Name = evt.Name??"None";
             Messages = new MessagesViewModel(evt.Messages.ToList());
             Date = evt.DateTime.ToShortDateString();

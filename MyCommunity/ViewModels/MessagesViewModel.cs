@@ -27,7 +27,7 @@ namespace MyCommunity.ViewModels
             Message = msg.Content;
             if (msg.From != null)
             {
-                From = msg.From.UserName;
+                From = msg.From.DisplayName;
             }
         }
 

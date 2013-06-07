@@ -26,6 +26,9 @@ namespace MyCommunity.Models
         [Required]
         public string Name { get; set; }
 
+        [Required]
+        public UserProfile Administrator { get; set; }
+
         public virtual ICollection<UserProfile> Members { get; set; }
 
         public UserProfile Admin { get; set; }

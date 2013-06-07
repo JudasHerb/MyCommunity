@@ -24,6 +24,7 @@ namespace MyCommunity
         protected void Application_Start()
         {
             Database.SetInitializer(new MigrateDatabaseToLatestVersion<UnitOfWork, Configuration>());
+            
 
             using (var unitOfWork = new UnitOfWork())
             {

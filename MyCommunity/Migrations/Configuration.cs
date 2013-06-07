@@ -19,7 +19,7 @@ namespace MyCommunity.Migrations
 
         protected override void Seed(MyCommunity.DataAccess.UnitOfWork context)
         {
-            context.Communities.AddOrUpdate(c => c.Name, new Community { Name = "Patcham" });
+            
 
             if (!WebSecurity.Initialized)
             {
@@ -29,23 +29,18 @@ namespace MyCommunity.Migrations
                                                          "UserName",
                                                          autoCreateTables: true);
 
-                var community = context.CommunitiesRepository.FindBy(c => c.Name == "Patcham").First();
-
                 if (!WebSecurity.UserExists("JudasHerb"))
                 {
-                    WebSecurity.CreateUserAndAccount("JudasHerb", "B0110cks!", new {Community=community});
-                }
-                else
-                {
-                    var judas = context.UsersRepository.FindBy(m => m.UserName == "JudasHerb").First();
-                    if (judas.Community == null)
-                    {
-                        community.Members.Add(judas);
-
-                        context.UsersRepository.Update(judas);
-                    }
+                    WebSecurity.CreateUserAndAccount("JudasHerb", "B0110cks!");
                 }
             }
+            var judas = context.UsersRepository.FindBy(m => m.UserName == "JudasHerb").First();
+            var commnunity = new Community {Name = "Patcham", Administrator = judas};
+            commnunity.Members.Add(judas);
+            judas.Community = commnunity;
+            context.Communities.AddOrUpdate(c => c.Name, commnunity);
+            
+            
 
         }
  

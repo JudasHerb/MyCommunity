@@ -1,7 +1,7 @@
 ﻿@model MyCommunity.ViewModels.MessageViewModel
 
 <div class="ui-corner-all"  style="border: 1px solid darkgray; margin-bottom: 3px; margin-top: 3px; padding: 5px;">
-    <p>From: @Html.ActionLink(Model.From, "Neighbour", new {id = Model.FromId})</p>
+    <p>From: @Html.ActionLink(Model.From, "Neighbour","Neighbour", new {id = Model.FromId},null)</p>
     
     <textarea class="ui-corner-all" style="background-color: lightgoldenrodyellow; resize: vertical" rows="4" readonly="readonly" >@Model.Message
         </textarea>

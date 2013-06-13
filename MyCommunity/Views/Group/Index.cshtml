@@ -1,0 +1,56 @@
+﻿@using MyCommunity.ViewModels.Group
+@model MyCommunity.ViewModels.Group.IndexViewModel
+<script>
+    $(function() {
+        $("#newGroupPopup").dialog({
+            autoOpen: false,
+            modal: true,
+            width: 569,
+            height: 382,
+            title: "Create a group",
+            open: function(event, ui) {
+                $(this).load("@Url.Action("CreateGroupPartial")");
+            }
+        });
+        $("#newGroupButton").button().click(function() {
+            $("#newGroupPopup").dialog("open");
+        });
+    });
+</script>
+@{
+    ViewBag.Title = "Public Groups";
+}
+<table style="width: 100%">
+    <tr>
+        <td>
+            <h2>Public Groups</h2>
+        </td>
+        <td >
+            <button style="float: right" id="newGroupButton">Create Group</button>
+        </td>
+    </tr>
+</table>
+
+
+@foreach (GroupViewModel camp in Model.Groups)
+{
+    <div class="ui-corner-all" style="border: 1px solid darkgray; margin-top: 3px; padding: 5px;">
+        @if (camp.IsSubscribed || camp.IsPublic)
+        {
+            <h3>@Html.ActionLink(@camp.Name, "Group", new {id = camp.Id})</h3>
+        }
+        else
+        {
+            <h3>@camp.Name</h3>
+        }
+        @if (!camp.IsPublic)
+        {
+            <p>*Private</p>
+        }
+        <p>(@camp.Members.Count.ToString() members)</p>
+        <p>@camp.Description</p>
+        
+    </div>
+}
+
+<div id="newGroupPopup" title="Dialog Title"></div>

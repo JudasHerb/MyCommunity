@@ -1,0 +1,54 @@
+﻿@model MyCommunity.ViewModels.Neighbour.NeighbourViewModel
+<script>
+    $(function() {
+        $("#messagePopup").dialog({
+            autoOpen: false,
+            modal: true,
+            width: 289,
+            height: 158,
+            title: "Confirmation"
+        });
+        $('#submit').button().click(function(event) {
+            var comment = $("#comment").val();
+            $.ajax({
+                url: "/Neighbour/Message",
+                type: "POST",
+                data: { "Comment": comment, "AddresseeId": @Model.ID },
+                success: function(data) {
+                    $("#messagePopup").dialog("open");
+                    $("#comment").val(null);
+                },
+                error: function(data) {
+                    alert('Oops. Something wnet wrong!');
+                }
+            });
+            return false;
+        });
+
+    });
+</script>
+@{
+    ViewBag.Title = "Neighbour";
+}
+<div id="messagePopup" title="Confirmation">
+    <p>Your message has been delivered</p>
+</div>
+<h3>@Model.Name</h3>
+<p>Address: @Model.Address</p>
+<p>Currently active in @Model.Groups.ToString() groups and @Model.Campaigns.ToString() campaigns</p>
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <fieldset>
+        <legend>Post a comment</legend>
+        <ol>
+            <li>
+                <textarea class="ui-corner-all" name="comment " id="comment" rows="4" ></textarea>
+            </li>
+        </ol>
+        <input id="submit" type="submit" value="Post" />
+    </fieldset>
+}

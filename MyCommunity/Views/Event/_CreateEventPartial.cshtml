@@ -1,0 +1,66 @@
+﻿@model MyCommunity.ViewModels.Event.CreateEventViewModel
+
+<script>
+    $(function() {
+
+        $("#Dt").datepicker({dateFormat:'dd-mm-yy'});
+
+        $("#submite").button().click(function(event) {
+            event.preventDefault();
+            var name = $("#Name").val();
+            var date = $("#Dt").val();
+            var locationt = $("#Location").val();
+            var description = $("#Description").val();
+
+
+            $.ajax({
+                type: "POST",
+                url: "/@Model.Ctrler/Event",
+                data: { "name": name, "dt": date,"location":locationt,"description":description, "objid": @Model.ObjId },
+                success: function(data) {
+    
+                    if (data.state == "Success") {
+                        $("#newEventPopup").dialog("close");
+                        $(location).attr("href", data.additional);
+                    } else {
+                        alert(data.additional);
+                    }
+                },
+                error: function(data) {
+                    $(this).closest("#newEventPopup").dialog("close");
+                }
+            });
+        });
+
+    });
+
+</script>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <fieldset>
+        <legend>Enter details</legend>
+        <ol>
+            <li>
+                @Html.LabelFor(m => m.Name)
+                @Html.TextBoxFor(m => m.Name)
+            </li>
+            <li>
+                @Html.LabelFor(m => m.Dt)
+                @Html.TextBoxFor(m => m.Dt, new {@readonly = "readonly"})
+            </li>
+            <li>
+                @Html.LabelFor(m => m.Location)
+                @Html.TextBoxFor(m => m.Location)
+            </li>
+            <li>
+                @Html.LabelFor(m => m.Description)
+                @Html.TextAreaFor(m => m.Description)
+            </li>
+            
+        </ol>
+        <input id="submite" type="submit" value="Save" />
+    </fieldset>
+}

@@ -1,8 +1,9 @@
-﻿<!DOCTYPE html>
+﻿@model MyCommunity.ViewModels.BaseViewModel
+<!DOCTYPE html>
 <html lang="en">
     <head>
         <meta charset="utf-8" />
-        <title>@ViewBag.Title - My Community</title>
+        <title>My Community @Model.CommunityName</title>
         <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
         <meta name="viewport" content="width=device-width" />
         @Styles.Render("~/Content/css")
@@ -18,18 +19,26 @@
         <header>
             <div class="content-wrapper">
                 <div class="float-left">
-                    <p class="site-title">@Html.ActionLink("My Community", "Index", "Home")</p>
+                    <p class="site-title">@Html.ActionLink(string.Format("{0} {1}", "My Community", Model.CommunityName), "Index", "Community")</p>
                 </div>
-                 <div class="float-right">
+                <div class="float-right">
                     <section id="login">
-                        @Html.Partial("_LoginPartial")
+                        @Html.Partial("_LoginPartial", Model)
                     </section>
                 </div>
             </div>
         </header>
         <div id="body">
+            
             @RenderSection("featured", required: false)
             <section class="content-wrapper main-content clear-fix">
+                @if (Model.Path.Count > 0)
+                {
+                    foreach (string str in Model.Path)
+                    {
+                        <p>@str</p>
+                    }
+                }
                 @RenderBody()
             </section>
         </div>
@@ -45,4 +54,3 @@
         @RenderSection("scripts", required: false)
     </body>
 </html>
-

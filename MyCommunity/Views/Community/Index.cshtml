@@ -1,0 +1,126 @@
+﻿@model MyCommunity.ViewModels.Community.IndexViewModel
+
+<script>
+    $(function() {
+
+        $('#mnu').accordion({
+            heightStyle: "content",
+            collapsible: true
+        });
+    });
+
+</script>
+ 
+
+@{
+    ViewBag.Title = @Model.CommunityName;
+}
+
+<table>
+    <tr>
+        <td style="vertical-align: top; width: 300px;">
+            <div id="mnu">
+                <h3>@Html.ActionLink("My Messages", "Messages", "Messaging")</h3>
+                <div>
+                    @if (Model.UnreadMessages == 0)
+                    {
+                        <p>You don't have any new message.</p>
+                    }
+                    else
+                    {
+                        <p>You have @Model.UnreadMessages new messages.</p>
+                    }
+                
+                
+                    <p style="float: right">@Html.ActionLink("Browse", "Messages", "Messaging", new{id=0}, null)</p>
+                </div>
+                <h3>@Html.ActionLink("My Neighbours", "Index", "Neighbour")</h3>
+                <div>
+                    @if (Model.Neightbours.Count == 0)
+                    {
+                        <p>You don't have any neighbours. Spread the word!</p>
+                    }
+                    else
+                    {
+                        foreach (var group in Model.Neightbours)
+                        {
+                            <p >@Html.ActionLink(group.Value, "Neighbour", "Neighbour", new {id = group.Key}, null)</p>
+                        }
+                    }
+                    <p style="float: right">@Html.ActionLink("Browse", "Index", "Neighbour")</p>
+                </div>
+                <h3>My Community Events</h3>
+                <div>
+                    @if (Model.Evts.Count == 0)
+                    {
+                        <p>You don't have any upcoming events.</p>
+                    }
+                    else
+                    {
+                        foreach (var group in Model.Evts)
+                        {
+                            <p >@Html.ActionLink(group.Value, "Event","Event", new {id = group.Key}, null)</p>
+                        }
+                    }
+                
+                
+                    <p style="float: right">@Html.ActionLink("Browse", "Events")</p>
+            
+                </div>
+                <h3>My Groups</h3>
+                <div>
+                    @if (Model.Groups.Count == 0)
+                    {
+                        <p>You have not joined any groups. Use the browse option to explore community groups to join.</p>
+                    }
+                    else
+                    {
+                        foreach (var group in Model.Groups)
+                        {
+                            <p>@Html.ActionLink(group.Value, "Group", "Group", new {id = group.Key}, null)</p>
+                        }
+                    }
+                
+                
+                    <p style="float: right">@Html.ActionLink("Browse", "Index", "Group")</p>
+            
+                </div>
+                <h3>My Campaigns</h3>
+                <div>
+                    @if (Model.Campaigns.Count == 0)
+                    {
+                        <p>You have not joined any campaigns. Use the browse option to explore community campaigns to join.</p>
+                    }
+                    else
+                    {
+                        foreach (var campaign in Model.Campaigns)
+                        {
+                            <p>@Html.ActionLink(campaign.Value, "Campaign", "Campaign", new {id = campaign.Key}, null)</p>
+                        }
+                    }
+            
+                
+                    <p style="float: right">@Html.ActionLink("Browse", "Index", "Campaign")</p>
+                </div>
+                <h3>@Html.ActionLink("My Councillors", "Index", "Campaign")</h3>
+                <div>
+                    <p>
+                    Contact community contact to update or add councillors    
+                    <p>
+
+                </div>
+                <h3>@Html.ActionLink("My MP", "Index", "MP")</h3>
+                <div>
+                    <p>
+                    Contact community contact to update or add MPs    
+                    <p>
+                </div>
+        
+        
+            </div>        
+        </td>
+        <td style="vertical-align: top" >
+            @Html.Partial("_MessagesPartial", Model.Comments)
+        </td>
+    </tr>
+</table>

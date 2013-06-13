@@ -1,0 +1,53 @@
+﻿@model MyCommunity.ViewModels.Group.CreateGroupViewModel
+
+<script>
+    $("#submit").button().click(function(event) {
+        event.preventDefault();
+        var name = $("#Name").val();
+        var description = $("#Description").val();
+        var isPublic = $("#IsPublic").is(':checked');
+
+        $.ajax({
+            type: "POST",
+            url: "/Group/Group",
+            data: { "name": name, "description": description,"IsPublic":isPublic },
+            success: function(data) {
+
+                if (data.state == "Success") {
+                    $("#newGroupPopup").dialog("close");
+                    $(location).attr("href", data.additional);
+                } else {
+                    alert(data.additional);
+                }
+            },
+            error: function(data) {
+                $(this).closest("#newGroupPopup").dialog("close");
+            }
+        });
+    });
+</script>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <fieldset>
+        <legend>Enter details</legend>
+        <ol>
+            <li>
+                @Html.LabelFor(m => m.Name)
+                @Html.TextBoxFor(m => m.Name)
+            </li>
+            <li>
+                @Html.LabelFor(m => m.Description)
+                @Html.TextAreaFor(m => m.Description)
+            </li>
+            <li>
+                @Html.LabelFor(m => m.IsPublic)
+                @Html.CheckBoxFor(m => m.IsPublic)
+
+            </li>
+        </ol>
+        <input id="submit" type="submit" value="Save" />
+    </fieldset>
+}

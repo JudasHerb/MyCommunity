@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Security;
+﻿using System.Linq;
 using MyCommunity.Models;
+using WebMatrix.WebData;
 
 namespace MyCommunity.DataAccess.Repositories
 {
@@ -16,8 +13,14 @@ namespace MyCommunity.DataAccess.Repositories
 
         public UserProfile CurrentUser()
         {
-            var user = Membership.GetUser();
-            return FindBy(u => u.Email == user.UserName).First();
+            if (WebSecurity.IsAuthenticated)
+            {
+                return FindBy(u => u.Email == WebSecurity.CurrentUserName).First();
+            }
+            else
+            {
+                return default(UserProfile);
+            }
         }
     }
 }

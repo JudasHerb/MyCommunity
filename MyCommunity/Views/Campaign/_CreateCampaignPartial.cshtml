@@ -1,0 +1,48 @@
+﻿@model MyCommunity.ViewModels.Campaign.CreateCampaignViewModel
+
+<script>
+    $("#submit").button().click(function(event) {
+        event.preventDefault();
+        var name = $("#Name").val();
+        var description = $("#Description").val();
+        var isPublic = $("#IsPublic").is(':checked');
+
+        $.ajax({
+            type: "POST",
+            url: "/Campaign/Campaign",
+            data: { "name": name, "description": description },
+            success: function(data) {
+
+                if (data.state == "Success") {
+                    $("#newCampaignPopup").dialog("close");
+                    $(location).attr("href", data.additional);
+                } else {
+                    alert(data.additional);
+                }
+            },
+            error: function(data) {
+                $(this).closest("#newCampaignPopup").dialog("close");
+            }
+        });
+    });
+</script>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <fieldset>
+        <legend>Create Campaign</legend>
+        <ol>
+            <li>
+                @Html.LabelFor(m => m.Name)
+                @Html.TextBoxFor(m => m.Name)
+            </li>
+            <li>
+                @Html.LabelFor(m => m.Description)
+                @Html.TextAreaFor(m => m.Description)
+            </li>
+        </ol>
+        <input id="submit" type="submit" value="Save" />
+    </fieldset>
+}

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using MyCommunity.DataAccess.Repositories;
+﻿using MyCommunity.DataAccess.Repositories;
 
 namespace MyCommunity.DataAccess
 {
@@ -13,7 +9,7 @@ namespace MyCommunity.DataAccess
         GroupsRepository GroupsRepository { get; }
         CampaignsRepository CampaignsRepository { get; }
         EventsRepository EventsRepository { get; }
-    
+        UserMessageRepository UserMessageRepository { get;  }
         void Save();
     }
 }

@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Web;
 
 namespace MyCommunity.Models
 {
     [Table("Communities")]
-    public class Community 
+    public class Community
     {
         public Community()
         {
@@ -19,8 +15,9 @@ namespace MyCommunity.Models
             Events = new HashSet<Event>();
             Messages = new HashSet<Message>();
         }
+
         [Key]
-        [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int CommunityId { get; set; }
 
         [Required]
@@ -38,6 +35,6 @@ namespace MyCommunity.Models
 
         public virtual ICollection<Councillor> Councillors { get; set; }
 
-        public virtual MP MP { get; set; } 
+        public virtual MP MP { get; set; }
     }
 }

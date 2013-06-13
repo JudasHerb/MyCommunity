@@ -1,0 +1,21 @@
+﻿@using MyCommunity.ViewModels.Neighbour
+@model MyCommunity.ViewModels.Neighbour.IndexViewModel
+@{
+    ViewBag.Title = "Neighbours";
+}
+
+<h2>Neighbours</h2>
+<br />
+
+
+@foreach (NeighbourViewModel n in Model.Neighbours)
+{
+    <div class="ui-corner-all" style="border: 1px solid darkgray; margin-top: 3px; padding: 5px;">
+        <h3>@Html.ActionLink(@n.Name, "Neighbour", new {id = n.ID})</h3>
+        <p>Activity: </p>
+        <p>@n.Groups.ToString() groups</p>
+
+        <p>@n.Campaigns.ToString() campaigns</p>
+        
+    </div>
+}

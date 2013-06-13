@@ -1,0 +1,19 @@
+﻿@model MyCommunity.ViewModels.Event.EventViewModel
+<script> </script>
+@{
+    ViewBag.Title = "Event";
+}
+<h2>@Model.Date -  @Model.Name</h2>
+<h3>@Model.Location</h3>
+<table>
+    <tr>
+        <td style="vertical-align: top; width: 300px;">
+            <div class="ui-corner-all" style="border: 1px solid darkgray; padding: 5px;">
+                <p>Description:</p>
+                <p> @Model.Description</p>
+            </div>
+        </td>
+        <td>
+            @Html.Partial("_MessagesPartial", Model.Messages)</td>
+    </tr>
+</table>

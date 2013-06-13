@@ -1,0 +1,26 @@
+﻿@model MyCommunity.ViewModels.Messaging.UserMessageViewModel
+
+@if(!Model.Sender)
+{
+    <div class="ui-corner-all"  style="border: 1px dotted darkgray; margin-bottom: 3px; margin-top: 3px; padding: 5px;width:300px;">
+        <p style="float:right">@Model.Sent</p>
+        <p>@Model.By Said:</p>
+    
+        <textarea class="ui-corner-all" style="background-color: lightgoldenrodyellow; resize: vertical;width:280px"  rows="4" readonly="readonly" >@Model.Content
+        </textarea>
+    
+
+    </div>
+        }
+        else
+        {
+            <div class="ui-corner-all"  style="border: 1px dotted darkgray; margin-bottom: 3px; margin-top: 3px; padding: 5px;width:300px;margin-left:350px;">
+                <p style="float:right">@Model.Sent</p>
+    <p>You said:</p>
+        <textarea class="ui-corner-all" style="background-color: lightgoldenrodyellow; resize: vertical;width:280px"  rows="4" readonly="readonly" >@Model.Content
+        </textarea>
+    
+
+    </div>
+        }
+        

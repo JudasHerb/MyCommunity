@@ -1,6 +1,6 @@
 ﻿@model MyCommunity.Models.RegisterModel
 <script>
-    $(function () {
+    $(function() {
         $('#submit').button();
     });
 
@@ -13,7 +13,8 @@
     <h2>Register a new account.</h2>
 </hgroup>
 
-@using (Html.BeginForm()) {
+@using (Html.BeginForm())
+{
     @Html.AntiForgeryToken()
     @Html.ValidationSummary()
 

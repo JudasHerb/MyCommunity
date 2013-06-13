@@ -1,0 +1,71 @@
+﻿@model MyCommunity.ViewModels.Messaging.UserMessagesViewModel
+<script>
+    $(function() {
+        $("#messagePopup").dialog({
+            autoOpen: false,
+            modal: true,
+            width: 289,
+            height: 158,
+            title: "Confirmation"
+        });
+        $('#submit').button().click(function(event) {
+            var comment = $("#comment").val();
+            $.ajax({
+                url: "/Neighbour/Message",
+                type: "POST",
+                data: { "Comment": comment, "AddresseeId": @Model.SelectedParticipantId },
+                success: function(data) {
+                    $('#comments').append(data);
+                    $("#comment").val(null);
+                },
+                error: function(data) {
+                    alert('Oops. Something wnet wrong!');
+                }
+            });
+            return false;
+        });
+
+    });
+</script>
+@{
+    ViewBag.Title = "Messages";
+}
+
+<h2>User Messages</h2>
+
+<table>
+    <tr>
+        <td style="vertical-align: top;  width: 200px;">
+            
+        <ul style="margin-left:-40px;">
+            @foreach (var p in Model.Participants)
+            {
+                <p>@Html.ActionLink(p.Value,"Messages", new {id=p.Key})</p>
+            }
+        </ul>
+            </td><td>
+@if (Model.Messages.Count > 0)
+{
+    <div id="comments" class="ui-corner-all" style="border:1px solid darkgray;padding: 5px;">
+    @foreach (var msg in Model.Messages)
+    {
+        @Html.Partial("_UserMessagePartial", msg)
+        
+    }
+        </div>
+    using (Html.BeginForm())
+    {
+    @Html.AntiForgeryToken()
+
+    <fieldset>
+        <legend>Post a comment</legend>
+        <ol>
+            <li>
+                <textarea class="ui-corner-all" name="comment " id="comment" rows="4" ></textarea>
+            </li>
+        </ol>
+        <input id="submit" type="submit" value="Post" />
+    </fieldset>
+    }
+}
+</td></tr></table>

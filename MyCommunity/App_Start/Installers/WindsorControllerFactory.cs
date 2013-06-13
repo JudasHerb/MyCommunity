@@ -1,13 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
 using Castle.MicroKernel;
-using Castle.MicroKernel.Registration;
-using Castle.MicroKernel.SubSystems.Configuration;
-using Castle.Windsor;
 
 namespace MyCommunity.App_Start.Installers
 {
@@ -31,7 +26,7 @@ namespace MyCommunity.App_Start.Installers
             {
                 throw new HttpException(404, "Nope, cannae find that!");
             }
-            return (IController)_kernel.Resolve(controllerType);
+            return (IController) _kernel.Resolve(controllerType);
         }
     }
 }

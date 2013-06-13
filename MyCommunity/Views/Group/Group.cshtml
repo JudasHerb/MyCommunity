@@ -1,0 +1,65 @@
+﻿@model MyCommunity.ViewModels.Group.GroupViewModel
+<script>
+    $(function() {
+        $('#mnu').accordion({
+            heightStyle: "content",
+            collapsible: true
+        });
+        $("#newEventPopup").dialog({
+            autoOpen: false,
+            modal: true,
+            width: 567,
+            height: 466,
+            title: "Create an event",
+            open: function(event, ui) {
+                $(this).load("@Html.Raw(Url.Action("CreateEventPartial", "Event", @Model.CreateEventModel))");
+            }
+        });
+        $("#newEventButton").button().click(function() {
+            $("#newEventPopup").dialog("open");
+        });
+
+    });
+
+</script>
+@{
+    ViewBag.Title = "Group";
+}
+
+<h2>@Model.Name</h2>
+<h3>@Model.Description</h3>
+@if (!Model.IsSubscribed)
+{
+    <p>@Html.ActionLink("Join", "JoinGroup",new {id=Model.Id})  this group to participate</p>
+}
+
+<table>
+    <tr>
+        <td style="vertical-align: top; width: 300px;">
+            <div id="mnu">
+                <h3>Events</h3>
+                <div>
+ 
+    
+                    @foreach (var group in Model.Evts)
+                    {
+                        <p>@Html.ActionLink(group.Value, "Event","Event", new {id = group.Key}, null)</p>
+                    }
+    @if (Model.IsSubscribed)
+    {
+        <button style="float: right" id="newEventButton">Create Event</button>
+    }
+                </div>
+                <h3>Members</h3>
+                <div>
+ 
+                    @foreach (var group in Model.Members)
+                    {
+                        <p>@group.Value</p>
+                    }
+                </div>
+            </div>
+            <div id="newEventPopup" title="Dialog Title"></div>
+        </td>
+        <td> @Html.Partial("_MessagesPartial", Model.Messages)
+        </td></tr></table>

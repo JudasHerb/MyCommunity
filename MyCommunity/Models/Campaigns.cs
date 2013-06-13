@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Web;
 
 namespace MyCommunity.Models
 {
-    public class Campaign 
+    public class Campaign
     {
         public Campaign()
         {
@@ -20,6 +16,7 @@ namespace MyCommunity.Models
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int CampaignId { get; set; }
+
         public virtual ICollection<Message> Messages { get; set; }
         public virtual ICollection<UserProfile> Members { get; set; }
         public virtual ICollection<Event> Events { get; set; }

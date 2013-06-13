@@ -1,0 +1,81 @@
+﻿@using MyCommunity.ViewModels
+@model MyCommunity.ViewModels.MessagesViewModel
+<script>
+    $(function() {
+        $('#moreButton').button().bind('click', { cnt: 1 }, function clickmore(event) {
+
+            if (event.data.cnt < 6) {
+                var msgCount = $('#msgCount').val();
+                $.ajax({
+                    url: "/@Model.Controller/MoreComments",
+                    type: "GET",
+                    data: { "count": msgCount, "Id": @Model.ObjId },
+                    success: function(data) {
+
+                        $('#comments').append(data);
+
+                        $('#msgCount').val(parseInt($('#msgCount').val()) + 1);
+
+                        event.data.cnt = event.data.cnt + 1;
+
+                        clickmore(event);
+                    }
+                });
+            } else {
+                event.data.cnt = 1;
+            }
+
+        });
+        $('#submit').button().click(function(event) {
+            var comment = $("#comment").val();
+            $.ajax({
+                url: "/@Model.Controller/Comment",
+                type: "POST",
+                data: { "comment": comment, "Id": @Model.ObjId },
+                success: function(data) {
+                    var els = $("#comments").find('div');
+                    if (els.length > 4) {
+                        els.last().remove();
+                    }
+
+                    $('#comments').prepend(data);
+                    $("#comment").val(null);
+
+                },
+                error: function(data) {
+                    alert('Oops. Something went wrong!');
+                }
+            });
+            return false;
+        });
+
+    });
+</script>
+<input id="msgCount" type="hidden" value="1"/>
+@if (Model.ShowForm)
+{
+    using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <fieldset>
+            <legend>Post a comment</legend>
+            <ol>
+                <li>
+                    <textarea class="ui-corner-all" name="comment " id="comment" rows="4" ></textarea>
+                </li>
+            </ol>
+            <input id="submit" type="submit" value="Post" />
+        </fieldset>
+    }
+}
+<div id="comments" >
+    @foreach (MessageViewModel comment in Model.Messages)
+    {
+        Html.RenderPartial("_MessagePartial", comment);
+    }
+</div> 
+@if (Model.ShowMore)
+{
+    <input style="float: right" id="moreButton" type="button" value="More.."/>
+}

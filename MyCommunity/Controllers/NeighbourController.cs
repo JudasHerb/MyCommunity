@@ -2,6 +2,7 @@
 using System.Web.Mvc;
 using MyCommunity.DataAccess;
 using MyCommunity.Models;
+using MyCommunity.Services;
 using MyCommunity.ViewModels.Messaging;
 using MyCommunity.ViewModels.Neighbour;
 
@@ -9,25 +10,28 @@ namespace MyCommunity.Controllers
 {
     public class NeighbourController : BaseController
     {
-        private readonly UserProfile _user;
+        private readonly ISecurityService _securityService;
+        private readonly IMessageService _messageService;
 
-        public NeighbourController(IUnitOfWork unitOfWork)
-            : base(unitOfWork)
+
+        public NeighbourController(ISecurityService securityService, IMessageService messageService)
+            : base(securityService)
         {
-            _user = _unitOfWork.UsersRepository.CurrentUser();
+            _securityService = securityService;
+            _messageService = messageService;
         }
 
 
         public ActionResult Index()
         {
-            return View(CreateViewModel<IndexViewModel>().With(_user.Community.Members));
+            var community = _securityService.CurrentUserCommunity();
+
+            return View(CreateViewModel<IndexViewModel>().With(community.Members));
         }
 
         public ActionResult Neighbour(int id)
         {
-            UserProfile neighbour = _unitOfWork.UsersRepository.Find(u => u.UserId == id);
-
-            if (neighbour == null) return RedirectToAction("Index", "Community");
+            var neighbour = _securityService.GetUser(id);
 
             return View(CreateViewModel<NeighbourViewModel>().With(neighbour));
         }
@@ -37,22 +41,8 @@ namespace MyCommunity.Controllers
         {
             if (ModelState.IsValid)
             {
-                UserProfile neighbour =
-                    _unitOfWork.UsersRepository.Find(u => u.UserId == model.AddresseeId);
-
-                if (neighbour == null) return Json(null);
-
-                var message = new UserMessage
-                    {
-                        Content = model.Comment,
-                        Sender = _user,
-                        Addressee = neighbour
-                    };
-
-                _unitOfWork.UserMessageRepository.Create(message);
-
-                _unitOfWork.Save();
-
+                var message = _messageService.CreateUserMessage(model.Comment, model.AddresseeId);
+                
                 return PartialView("_UserMessagePartial", new UserMessageViewModel(message,true));
             }
 

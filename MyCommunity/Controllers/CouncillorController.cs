@@ -1,23 +1,28 @@
 ﻿using System.Web.Mvc;
 using MyCommunity.DataAccess;
 using MyCommunity.Models;
+using MyCommunity.Services;
 using MyCommunity.ViewModels.Councillor;
 
 namespace MyCommunity.Controllers
 {
     public class CouncillorController : BaseController
     {
-        private readonly UserProfile _user;
+        private readonly ISecurityService _securityService;
+        
 
-        public CouncillorController(IUnitOfWork unitOfWork)
-            : base(unitOfWork)
+        public CouncillorController(ISecurityService securityService)
+            : base(securityService)
         {
-            _user = _unitOfWork.UsersRepository.CurrentUser();
+            _securityService = securityService;
+            
         }
 
         public ActionResult Index()
         {
-            return View(CreateViewModel<IndexViewModel>().With(_user.Community.Councillors));
+            var community = _securityService.CurrentUserCommunity();
+
+            return View(CreateViewModel<IndexViewModel>().With(community.Councillors));
         }
     }
 }

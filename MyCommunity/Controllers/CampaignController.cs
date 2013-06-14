@@ -3,6 +3,7 @@ using System.Linq;
 using System.Web.Mvc;
 using MyCommunity.DataAccess;
 using MyCommunity.Models;
+using MyCommunity.Services;
 using MyCommunity.ViewModels;
 using MyCommunity.ViewModels.Campaign;
 using MyCommunity.ViewModels.Event;
@@ -11,26 +12,28 @@ namespace MyCommunity.Controllers
 {
     public class CampaignController : BaseController
     {
-        private readonly UserProfile _user;
+        private readonly ISecurityService _securityService;
+        private readonly ICampaignService _campaignService;
+        private readonly IEventService _eventService;
+        private readonly IMessageService _messageService;
 
-        public CampaignController(IUnitOfWork unitOfWork)
-            : base(unitOfWork)
+
+        public CampaignController(ISecurityService securityService, ICampaignService campaignService, IEventService eventService, IMessageService messageService)
+            : base(securityService)
         {
-            _user = _unitOfWork.UsersRepository.CurrentUser();
+            _securityService = securityService;
+            _campaignService = campaignService;
+            _eventService = eventService;
+            _messageService = messageService;
         }
 
         public ActionResult Campaign(int id)
         {
-            Campaign campaign = _unitOfWork.CampaignsRepository.Find(c => c.CampaignId == id);
+            var campaign = _campaignService.GetCampaign(id);
+            
+            var model = CreateViewModel<CampaignViewModel>().With(campaign);
 
-            if (campaign == null) RedirectToAction("Index", "Community");
-
-            CampaignViewModel model = CreateViewModel<CampaignViewModel>().With(campaign);
-
-            if (!campaign.Members.Contains(_user))
-            {
-                model = model.NotSubscribed();
-            }
+            if (!_campaignService.IsUserSubscribedTo(campaign)) model = model.NotSubscribed();
 
             return View(model);
         }
@@ -45,24 +48,9 @@ namespace MyCommunity.Controllers
         {
             if (ModelState.IsValid)
             {
-                var newCampaign = new Campaign
-                    {
-                        Name = campaign.Name,
-                        Description = campaign.Description,
-                    };
+                var newCampaign = _campaignService.CreateCampaign(campaign.Name, campaign.Description);
 
-                newCampaign.Members.Add(_user);
-
-                _user.Community.Campaigns.Add(newCampaign);
-
-                _unitOfWork.Save();
-
-                return Json(
-                    new
-                        {
-                            state = "Success",
-                            additional = Url.Action("Campaign", new {id = newCampaign.CampaignId})
-                        });
+                return Json(new {state = "Success", additional = Url.Action("Campaign", new {id = newCampaign.CampaignId})});
             }
 
             return Json(new {state = "Fail", additional = "Need to fill in all data"});
@@ -70,21 +58,13 @@ namespace MyCommunity.Controllers
 
         public ActionResult Index()
         {
-            return View(CreateViewModel<IndexViewModel>().With(_user.Community.Campaigns));
+            return View(CreateViewModel<IndexViewModel>().With(_securityService.CurrentUserCommunity().Campaigns));
         }
-
-
 
         public ActionResult JoinCampaign(int Id)
         {
-            Campaign campaign = _unitOfWork.CampaignsRepository.Find(c => c.CampaignId == Id);
-
-            if (campaign == null) RedirectToAction("Index", "Community");
-
-            campaign.Members.Add(_user);
-
-            _unitOfWork.Save();
-
+            _campaignService.JoinCampaign(Id);
+            
             return RedirectToAction("Campaign", new {id = Id});
         }
 
@@ -93,29 +73,9 @@ namespace MyCommunity.Controllers
         {
             if (ModelState.IsValid)
             {
-                Campaign campaign =
-                    _unitOfWork.CampaignsRepository.Find(g => g.CampaignId == group.ObjId);
+                var newEvent = _eventService.CreateCampaignEvent(group.ObjId,group.Name, DateTime.Parse(group.Dt), group.Location, group.Description);
 
-                if (campaign == null) return Json(new {state = "Fail", additional = "Unknown Campaign"});
-
-                var newEvent = new Event
-                    {
-                        Name = group.Name,
-                        DateTime = DateTime.Parse(group.Dt),
-                        Location = group.Location,
-                        Description = group.Description
-                    };
-
-                campaign.Events.Add(newEvent);
-
-                _unitOfWork.Save();
-
-                return Json(
-                    new
-                        {
-                            state = "Success",
-                            additional = Url.Action("Event", "Event", new {id = newEvent.EventId})
-                        });
+                return Json(new {state = "Success", additional = Url.Action("Event", "Event", new {id = newEvent.EventId})});
             }
             else
             {
@@ -131,15 +91,7 @@ namespace MyCommunity.Controllers
         [HttpPost]
         public ActionResult Comment(string comment, int Id)
         {
-            Campaign campaign = _unitOfWork.CampaignsRepository.Find(g => g.CampaignId == Id);
-
-            if (campaign == null) return Json(new {state = "Fail", additional = "Unknown Campaign"});
-
-            var message = new Message {Content = comment, From = _user};
-
-            campaign.Messages.Add(message);
-
-            _unitOfWork.Save();
+            var message = _messageService.CreateCampaignMessage(comment, Id);
 
             return PartialView("_MessagePartial", CreateViewModel<MessageViewModel>().With(message));
         }

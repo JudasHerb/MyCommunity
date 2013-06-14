@@ -3,6 +3,7 @@ using System.Linq;
 using System.Web.Mvc;
 using MyCommunity.DataAccess;
 using MyCommunity.Models;
+using MyCommunity.Services;
 using MyCommunity.ViewModels;
 using MyCommunity.ViewModels.Event;
 using MyCommunity.ViewModels.Group;
@@ -11,25 +12,32 @@ namespace MyCommunity.Controllers
 {
     public class GroupController : BaseController
     {
-        private readonly UserProfile _user;
+        private readonly ISecurityService _securityService;
+        private readonly IGroupService _groupService;
+        
+        private readonly IEventService _eventService;
+        private readonly IMessageService _messageService;
 
-        public GroupController(IUnitOfWork unitOfWork)
-            : base(unitOfWork)
+
+        public GroupController(ISecurityService securityService, IGroupService groupService, IEventService eventService, IMessageService messageService)
+            : base(securityService)
         {
-            _user = _unitOfWork.UsersRepository.CurrentUser();
+            _securityService = securityService;
+            _groupService = groupService;
+            
+            _eventService = eventService;
+            _messageService = messageService;
         }
 
         public ActionResult Group(int id)
         {
-            Group group = _unitOfWork.GroupsRepository.Find(g => g.GroupId == id);
+            var group = _groupService.GetGroup(id);
 
-            if (group == null) RedirectToAction("Index", "Community");
+            if (_groupService.UserNeedsInviteTo(group)) return View("PrivateGroup",CreateViewModel<PrivateGroupViewModel>());
 
-            if (!group.Members.Contains(_user) && !group.IsPublic) return View("PrivateGroup",CreateViewModel<PrivateGroupViewModel>());
+            var model = CreateViewModel<GroupViewModel>().With(group);
 
-            GroupViewModel model = CreateViewModel<GroupViewModel>().With(group);
-
-            if (!group.Members.Contains(_user) && group.IsPublic) model = model.NotSubscribed();
+            if (!_groupService.UserIsSubscribedTo(group)) model = model.NotSubscribed();
 
             return View(model);
         }
@@ -39,32 +47,14 @@ namespace MyCommunity.Controllers
             return PartialView("_CreateGroupPartial");
         }
 
-   
-
         [HttpPost]
         public ActionResult Group(CreateGroupViewModel group)
         {
             if (ModelState.IsValid)
             {
-                var newgroup = new Group
-                    {
-                        Name = group.Name,
-                        Description = group.Description,
-                        IsPublic = group.IsPublic
-                    };
+                var newGroup = _groupService.CreateGroup(group.Name, group.Description, group.IsPublic);
 
-                newgroup.Members.Add(_user);
-
-                _user.Community.Groups.Add(newgroup);
-
-                _unitOfWork.Save();
-
-                return Json(
-                    new
-                        {
-                            state = "Success",
-                            additional = Url.Action("Group", new {id = newgroup.GroupId})
-                        });
+                return Json(new { state = "Success", additional = Url.Action("Group", new { id = newGroup.GroupId }) });
             }
 
             return Json(new {state = "Fail", additional = "Need to fill in all data"});
@@ -72,18 +62,14 @@ namespace MyCommunity.Controllers
 
         public ActionResult Index()
         {
-            return View(CreateViewModel<IndexViewModel>().With(_user.Community.Groups,_user));
+            var user = _securityService.CurrentUser();
+
+            return View(CreateViewModel<IndexViewModel>().With(user.Community.Groups,user));
         }
 
         public ActionResult JoinGroup(int Id)
         {
-            Group group = _unitOfWork.GroupsRepository.Find(c => c.GroupId == Id);
-
-            if (group == null) RedirectToAction("Index", "Community");
-
-            group.Members.Add(_unitOfWork.UsersRepository.CurrentUser());
-
-            _unitOfWork.Save();
+            _groupService.JoinGroup(Id);
 
             return RedirectToAction("Group", new {id = Id});
         }
@@ -93,27 +79,9 @@ namespace MyCommunity.Controllers
         {
             if (ModelState.IsValid)
             {
-                //var user = _unitOfWork.UsersRepository.CurrentUser();
-                Group group = _unitOfWork.GroupsRepository.Find(g => g.GroupId == model.ObjId);
+                var newEvent = _eventService.CreateGroupEvent(model.ObjId,model.Name, DateTime.Parse(model.Dt), model.Location, model.Description);
 
-                var newEvent = new Event
-                    {
-                        Name = model.Name,
-                        DateTime = DateTime.Parse(model.Dt),
-                        Location = model.Location,
-                        Description = model.Description
-                    };
-
-                group.Events.Add(newEvent);
-
-                _unitOfWork.Save();
-
-                return Json(
-                    new
-                        {
-                            state = "Success",
-                            additional = Url.Action("Event", "Event", new {id = newEvent.EventId})
-                        });
+                return Json(new {state = "Success", additional = Url.Action("Event", "Event", new {id = newEvent.EventId})});
             }
 
             return Json(new {state = "Fail", additional = "Need to fill in all data"});
@@ -121,17 +89,11 @@ namespace MyCommunity.Controllers
 
         public ActionResult MoreComments(int count, int Id)
         {
-            Group group = _unitOfWork.GroupsRepository.Find(gr => gr.GroupId == Id);
+            var nextMessage = _messageService.PageGroupMessage(count, Id);
 
-            if (group == null) return Json(null);
-
-            if ((4 + count) < group.Messages.Count)
+            if (nextMessage != null)
             {
-                Message nextMessage = group.Messages.Reverse().Skip(4 + count).FirstOrDefault();
-                if (nextMessage != null)
-                {
-                    return PartialView("_MessagePartial", CreateViewModel<MessageViewModel>().With(nextMessage));
-                }
+                return PartialView("_MessagePartial", CreateViewModel<MessageViewModel>().With(nextMessage));
             }
 
             return Json(null);
@@ -140,16 +102,8 @@ namespace MyCommunity.Controllers
         [HttpPost]
         public ActionResult Comment(string comment, int Id)
         {
-            Group group = _unitOfWork.GroupsRepository.Find(g => g.GroupId == Id);
-
-            if (group == null) return Json(new {state = "Fail", additional = "Unknown Group"});
-
-            var message = new Message {Content = comment, From = _user};
-
-            group.Messages.Add(message);
-
-            _unitOfWork.Save();
-
+            var message = _messageService.CreateGroupMessage(comment, Id);
+            
             return PartialView("_MessagePartial", CreateViewModel<MessageViewModel>().With(message));
         }
     }

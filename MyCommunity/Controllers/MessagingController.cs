@@ -2,35 +2,33 @@
 using System.Web.Mvc;
 using MyCommunity.DataAccess;
 using MyCommunity.Models;
+using MyCommunity.Services;
 using MyCommunity.ViewModels.Messaging;
 
 namespace MyCommunity.Controllers
 {
     public class MessagingController : BaseController
     {
-        private readonly UserProfile _user;
+        private readonly ISecurityService _securityService;
+        private readonly IMessageService _messageService;
 
-        public MessagingController(IUnitOfWork unitOfWork)
-            : base(unitOfWork)
+
+        public MessagingController(ISecurityService securityService, IMessageService messageService)
+            : base(securityService)
         {
-            _user = _unitOfWork.UsersRepository.CurrentUser();
+            _securityService = securityService;
+            _messageService = messageService;
         }
 
         public ActionResult Messages(int id)
         {
-            var participant = _unitOfWork.UsersRepository.Find(u => u.UserId == id);
-            if (participant != null)
-            {
+            var user = _securityService.CurrentUser();
 
-                foreach (UserMessage msg in _user.ReceivedMessages.Where(m => !m.IsRead&&m.SenderId==participant.UserId))
-                {
-                    msg.IsRead = true;
-                }
+            var participant = _securityService.GetUser(id);
 
-                _unitOfWork.Save();
-            }
-
-            return View(CreateViewModel<UserMessagesViewModel>().With(_user, participant));
+            _messageService.MarkUsersMessagesAsReadByParticipant(user, participant);
+            
+            return View(CreateViewModel<UserMessagesViewModel>().With(user, participant));
         }
     }
 }

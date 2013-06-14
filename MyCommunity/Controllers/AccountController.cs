@@ -8,6 +8,7 @@ using DotNetOpenAuth.AspNet;
 using Microsoft.Web.WebPages.OAuth;
 using MyCommunity.DataAccess;
 using MyCommunity.Models;
+using MyCommunity.Services;
 using WebMatrix.WebData;
 //using MyCommunity.Filters;
 
@@ -17,8 +18,12 @@ namespace MyCommunity.Controllers
     //[InitializeSimpleMembership]
     public class AccountController : BaseController
     {
-        public AccountController(IUnitOfWork unitOfWork) : base(unitOfWork)
+        private readonly ISecurityService _securityService;
+
+        public AccountController(ISecurityService securityService)
+            : base(securityService)
         {
+            _securityService = securityService;
         }
 
         //
@@ -84,7 +89,7 @@ namespace MyCommunity.Controllers
                 // Attempt to register the user
                 try
                 {
-                    Community community = _unitOfWork.CommunitiesRepository.All().First();
+                    Community community = _securityService.DefaultCommunity();
 
                     WebSecurity.CreateUserAndAccount(model.Email, model.Password,
                                                      new
@@ -98,11 +103,8 @@ namespace MyCommunity.Controllers
 
                     WebSecurity.Login(model.Email, model.Password);
 
-                    UserProfile user = _unitOfWork.UsersRepository.Find(u => u.Email == model.Email);
-                    user.Community = community;
-                    community.Members.Add(user);
-
-                    _unitOfWork.Save();
+                    _securityService.AssignToDefaultCommunityByMail(model.Email);
+                    
 
                     return RedirectToAction("Index", "Community");
                 }

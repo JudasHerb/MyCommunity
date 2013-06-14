@@ -12,7 +12,7 @@ namespace MyCommunity.DataAccess
         CampaignsRepository CampaignsRepository { get; }
         EventsRepository EventsRepository { get; }
         UserMessageRepository UserMessageRepository { get; }
-
+        MessagesRepository MessagesRepository { get; }
         void Save();
     }
 }

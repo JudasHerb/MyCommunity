@@ -1,23 +1,27 @@
 ﻿using System.Web.Mvc;
 using MyCommunity.DataAccess;
 using MyCommunity.Models;
+using MyCommunity.Services;
 using MyCommunity.ViewModels.MP;
 
 namespace MyCommunity.Controllers
 {
     public class MPController : BaseController
     {
-        private readonly UserProfile _user;
+        private readonly ISecurityService _securityService;
+        
 
-        public MPController(IUnitOfWork unitOfWork)
-            : base(unitOfWork)
+        public MPController(ISecurityService securityService)
+            : base(securityService)
         {
-            _user = _unitOfWork.UsersRepository.CurrentUser();
+            _securityService = securityService;
+        
         }
 
         public ActionResult MP()
         {
-            return View(CreateViewModel<MPViewModel>().With(_user.Community.MP));
+            var community = _securityService.CurrentUserCommunity();
+            return View(CreateViewModel<MPViewModel>().With(community.MP));
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System.Web.Mvc;
 using MyCommunity.DataAccess;
 using MyCommunity.Models;
+using MyCommunity.Services;
 using MyCommunity.ViewModels;
 using WebMatrix.WebData;
 
@@ -8,18 +9,20 @@ namespace MyCommunity.Controllers
 {
     public class BaseController : Controller
     {
-        protected readonly IUnitOfWork _unitOfWork;
+        private readonly ISecurityService _securityService;
 
-        public BaseController(IUnitOfWork unitOfWork)
+
+        public BaseController(ISecurityService securityService)
         {
-            _unitOfWork = unitOfWork;
+            _securityService = securityService;
+            
         }
 
         public T CreateViewModel<T>() where T : BaseViewModel, new()
         {
-            if (WebSecurity.IsAuthenticated)
+            if (_securityService.IsAuthenticated)
             {
-                UserProfile user = _unitOfWork.UsersRepository.CurrentUser();
+                UserProfile user = _securityService.CurrentUser();
 
                 var viewModel = new T
                     {

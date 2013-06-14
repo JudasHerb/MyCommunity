@@ -3,6 +3,7 @@ using System.Linq;
 using System.Web.Mvc;
 using MyCommunity.DataAccess;
 using MyCommunity.Models;
+using MyCommunity.Services;
 using MyCommunity.ViewModels;
 using MyCommunity.ViewModels.Community;
 using MyCommunity.ViewModels.Event;
@@ -11,28 +12,33 @@ namespace MyCommunity.Controllers
 {
     public class CommunityController : BaseController
     {
-        private readonly UserProfile _user;
+        private readonly IMessageService _messageService;
+        private readonly ISecurityService _securityService;
+        private readonly IEventService _eventService;
 
-        public CommunityController(IUnitOfWork unitOfWork)
-            : base(unitOfWork)
+
+        public CommunityController(IMessageService messageService,ISecurityService securityService, IEventService eventService)
+            : base(securityService)
         {
-            _user = _unitOfWork.UsersRepository.CurrentUser();
+            _messageService = messageService;
+            _securityService = securityService;
+            _eventService = eventService;
         }
 
         public ActionResult Index()
         {
-            return View(CreateViewModel<IndexViewModel>().With(_user));
+            var user = _securityService.CurrentUser();
+
+            return View(CreateViewModel<IndexViewModel>().With(user));
         }
 
         public ActionResult MoreComments(int count, int Id)
         {
-            if ((4 + count) < _user.Community.Messages.Count)
+            var nextMessage = _messageService.PageCommunityMessage(count, Id);
+
+            if (nextMessage != null)
             {
-                Message nextMessage = _user.Community.Messages.Reverse().Skip(4 + count).FirstOrDefault();
-                if (nextMessage != null)
-                {
-                    return PartialView("_MessagePartial", CreateViewModel<MessageViewModel>().With(nextMessage));
-                }
+                return PartialView("_MessagePartial", CreateViewModel<MessageViewModel>().With(nextMessage));
             }
 
             return Json(null);
@@ -41,11 +47,7 @@ namespace MyCommunity.Controllers
         [HttpPost]
         public ActionResult Comment(string comment, int Id)
         {
-            var message = new Message {Content = comment, From = _user};
-
-            _user.Community.Messages.Add(message);
-
-            _unitOfWork.Save();
+            var message = _messageService.CreateCommunityMessage(comment, Id);
 
             return PartialView("_MessagePartial", CreateViewModel<MessageViewModel>().With(message));
         }
@@ -55,24 +57,9 @@ namespace MyCommunity.Controllers
         {
             if (ModelState.IsValid)
             {
-                var newEvent = new Event
-                    {
-                        Name = group.Name,
-                        DateTime = DateTime.Parse(group.Dt),
-                        Location = group.Location,
-                        Description = group.Description
-                    };
+                var newEvent = _eventService.CreateCommunityEvent(group.ObjId,group.Name, DateTime.Parse(group.Dt), group.Location, group.Description);
 
-                _user.Community.Events.Add(newEvent);
-
-                _unitOfWork.Save();
-
-                return Json(
-                    new
-                        {
-                            state = "Success",
-                            additional = Url.Action("Event", "Event", new {id = newEvent.EventId})
-                        });
+                return Json(new {state = "Success", additional = Url.Action("Event", "Event", new {id = newEvent.EventId})});
             }
             else
             {
@@ -82,7 +69,9 @@ namespace MyCommunity.Controllers
 
         public ActionResult Events()
         {
-            return View(CreateViewModel<BrowseEventsViewModel>().With(_user.Community.Events, _user.CommunityID));
+            var community = _securityService.CurrentUserCommunity();
+
+            return View(CreateViewModel<BrowseEventsViewModel>().With(community.Events, community.CommunityId));
         }
     }
 }

@@ -10,6 +10,8 @@ namespace MyCommunity.App_Start.Installers
 
         public void Install(IWindsorContainer container, IConfigurationStore store)
         {
+            container.Register(
+                Classes.FromThisAssembly().InNamespace("MyCommunity.Services").WithServiceFirstInterface().Configure(s=>s.LifestyleTransient()));
         }
 
         #endregion

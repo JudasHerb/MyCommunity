@@ -11,16 +11,6 @@ namespace MyCommunity.DataAccess.Repositories
         {
         }
 
-        public UserProfile CurrentUser()
-        {
-            if (WebSecurity.IsAuthenticated)
-            {
-                return Find(u => u.Email == WebSecurity.CurrentUserName);
-            }
-            else
-            {
-                return default(UserProfile);
-            }
-        }
+       
     }
 }

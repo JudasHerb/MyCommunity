@@ -22,12 +22,12 @@ namespace MyCommunity
 
         protected void Application_Start()
         {
-            Database.SetInitializer(new MigrateDatabaseToLatestVersion<UnitOfWork, Configuration>());
+            Database.SetInitializer(new MigrateDatabaseToLatestVersion<DB, Configuration>());
 
 
-            using (var unitOfWork = new UnitOfWork())
+            using (var db = new DB())
             {
-                Community results = unitOfWork.Communities.FirstOrDefault();
+                Community results = db.Communities.FirstOrDefault();
             }
 
             AreaRegistration.RegisterAllAreas();

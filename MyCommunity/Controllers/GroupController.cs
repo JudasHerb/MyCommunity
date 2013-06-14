@@ -21,7 +21,7 @@ namespace MyCommunity.Controllers
 
         public ActionResult Group(int id)
         {
-            Group group = _unitOfWork.GroupsRepository.FindBy(g => g.GroupId == id).FirstOrDefault();
+            Group group = _unitOfWork.GroupsRepository.Find(g => g.GroupId == id);
 
             if (group == null) RedirectToAction("Index", "Community");
 
@@ -77,7 +77,7 @@ namespace MyCommunity.Controllers
 
         public ActionResult JoinGroup(int Id)
         {
-            Group group = _unitOfWork.GroupsRepository.FindBy(c => c.GroupId == Id).FirstOrDefault();
+            Group group = _unitOfWork.GroupsRepository.Find(c => c.GroupId == Id);
 
             if (group == null) RedirectToAction("Index", "Community");
 
@@ -94,7 +94,7 @@ namespace MyCommunity.Controllers
             if (ModelState.IsValid)
             {
                 //var user = _unitOfWork.UsersRepository.CurrentUser();
-                Group group = _unitOfWork.GroupsRepository.FindBy(g => g.GroupId == model.ObjId).FirstOrDefault();
+                Group group = _unitOfWork.GroupsRepository.Find(g => g.GroupId == model.ObjId);
 
                 var newEvent = new Event
                     {
@@ -121,7 +121,7 @@ namespace MyCommunity.Controllers
 
         public ActionResult MoreComments(int count, int Id)
         {
-            Group group = _unitOfWork.GroupsRepository.FindBy(gr => gr.GroupId == Id).FirstOrDefault();
+            Group group = _unitOfWork.GroupsRepository.Find(gr => gr.GroupId == Id);
 
             if (group == null) return Json(null);
 
@@ -140,7 +140,7 @@ namespace MyCommunity.Controllers
         [HttpPost]
         public ActionResult Comment(string comment, int Id)
         {
-            Group group = _unitOfWork.GroupsRepository.FindBy(g => g.GroupId == Id).FirstOrDefault();
+            Group group = _unitOfWork.GroupsRepository.Find(g => g.GroupId == Id);
 
             if (group == null) return Json(new {state = "Fail", additional = "Unknown Group"});
 

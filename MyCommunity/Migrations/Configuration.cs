@@ -5,7 +5,7 @@ using WebMatrix.WebData;
 
 namespace MyCommunity.Migrations
 {
-    internal sealed class Configuration : DbMigrationsConfiguration<UnitOfWork>
+    internal sealed class Configuration : DbMigrationsConfiguration<DB>
     {
         public Configuration()
         {
@@ -13,7 +13,7 @@ namespace MyCommunity.Migrations
             AutomaticMigrationDataLossAllowed = true;
         }
 
-        protected override void Seed(UnitOfWork context)
+        protected override void Seed(DB context)
         {
             if (!WebSecurity.Initialized)
             {
@@ -27,7 +27,7 @@ namespace MyCommunity.Migrations
                 {
                     var commnunity = new Community {Name = "Patcham"};
                     context.Communities.AddOrUpdate(c => c.Name, commnunity);
-                    context.Save();
+                    context.SaveChanges();
                     WebSecurity.CreateUserAndAccount("david.garratt.little@gmail.com", "B0110cks!",
                                                      new
                                                          {

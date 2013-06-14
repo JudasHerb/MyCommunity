@@ -6,7 +6,7 @@ namespace MyCommunity.DataAccess.Repositories
 {
     public class CommunityRepository : Repository<Community>
     {
-        public CommunityRepository(UnitOfWork entities)
+        public CommunityRepository(DB entities)
             : base(entities)
         {
         }

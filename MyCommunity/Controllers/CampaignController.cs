@@ -21,7 +21,7 @@ namespace MyCommunity.Controllers
 
         public ActionResult Campaign(int id)
         {
-            Campaign campaign = _unitOfWork.CampaignsRepository.FindBy(c => c.CampaignId == id).FirstOrDefault();
+            Campaign campaign = _unitOfWork.CampaignsRepository.Find(c => c.CampaignId == id);
 
             if (campaign == null) RedirectToAction("Index", "Community");
 
@@ -77,7 +77,7 @@ namespace MyCommunity.Controllers
 
         public ActionResult JoinCampaign(int Id)
         {
-            Campaign campaign = _unitOfWork.CampaignsRepository.FindBy(c => c.CampaignId == Id).FirstOrDefault();
+            Campaign campaign = _unitOfWork.CampaignsRepository.Find(c => c.CampaignId == Id);
 
             if (campaign == null) RedirectToAction("Index", "Community");
 
@@ -94,7 +94,7 @@ namespace MyCommunity.Controllers
             if (ModelState.IsValid)
             {
                 Campaign campaign =
-                    _unitOfWork.CampaignsRepository.FindBy(g => g.CampaignId == group.ObjId).FirstOrDefault();
+                    _unitOfWork.CampaignsRepository.Find(g => g.CampaignId == group.ObjId);
 
                 if (campaign == null) return Json(new {state = "Fail", additional = "Unknown Campaign"});
 
@@ -131,7 +131,7 @@ namespace MyCommunity.Controllers
         [HttpPost]
         public ActionResult Comment(string comment, int Id)
         {
-            Campaign campaign = _unitOfWork.CampaignsRepository.FindBy(g => g.CampaignId == Id).FirstOrDefault();
+            Campaign campaign = _unitOfWork.CampaignsRepository.Find(g => g.CampaignId == Id);
 
             if (campaign == null) return Json(new {state = "Fail", additional = "Unknown Campaign"});
 

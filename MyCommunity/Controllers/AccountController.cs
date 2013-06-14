@@ -84,7 +84,7 @@ namespace MyCommunity.Controllers
                 // Attempt to register the user
                 try
                 {
-                    Community community = _unitOfWork.CommunitiesRepository.GetAll().First();
+                    Community community = _unitOfWork.CommunitiesRepository.All().First();
 
                     WebSecurity.CreateUserAndAccount(model.Email, model.Password,
                                                      new
@@ -98,7 +98,7 @@ namespace MyCommunity.Controllers
 
                     WebSecurity.Login(model.Email, model.Password);
 
-                    UserProfile user = _unitOfWork.UsersRepository.FindBy(u => u.Email == model.Email).First();
+                    UserProfile user = _unitOfWork.UsersRepository.Find(u => u.Email == model.Email);
                     user.Community = community;
                     community.Members.Add(user);
 
@@ -301,7 +301,7 @@ namespace MyCommunity.Controllers
             if (ModelState.IsValid)
             {
                 // Insert a new user into the database
-                using (var db = new UnitOfWork())
+                using (var db = new DB())
                 {
                     UserProfile user = db.UserProfiles.FirstOrDefault(u => u.Email.ToLower() == model.UserName.ToLower());
                     // Check if user already exists

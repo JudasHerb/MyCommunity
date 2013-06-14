@@ -6,7 +6,7 @@ namespace MyCommunity.DataAccess.Repositories
 {
     public class UsersRepository : Repository<UserProfile>
     {
-        public UsersRepository(UnitOfWork entities)
+        public UsersRepository(DB entities)
             : base(entities)
         {
         }
@@ -15,7 +15,7 @@ namespace MyCommunity.DataAccess.Repositories
         {
             if (WebSecurity.IsAuthenticated)
             {
-                return FindBy(u => u.Email == WebSecurity.CurrentUserName).First();
+                return Find(u => u.Email == WebSecurity.CurrentUserName);
             }
             else
             {

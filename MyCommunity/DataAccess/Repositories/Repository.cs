@@ -1,50 +1,114 @@
 ﻿using System;
 using System.Data;
+using System.Data.Entity;
 using System.Linq;
 using System.Linq.Expressions;
 
 namespace MyCommunity.DataAccess.Repositories
 {
-    public class Repository<T> : IRepository<T> where T : class
+    public class Repository<TObject> : IRepository<TObject> where TObject : class
     {
-        protected readonly UnitOfWork _entities;
 
-        public Repository(UnitOfWork entities)
+        protected DB Context;
+
+        public Repository(DB context)
         {
-            _entities = entities;
+            Context = context;
+            
         }
 
-        #region IRepository<T> Members
-
-        public virtual IQueryable<T> GetAll()
+        protected DbSet<TObject> DbSet
         {
-            IQueryable<T> query = _entities.Set<T>();
-            return query;
+            get
+            {
+                return Context.Set<TObject>();
+            }
         }
 
-        public IQueryable<T> FindBy(Expression<Func<T, bool>> predicate)
+        public void Dispose()
         {
-            IQueryable<T> query = _entities.Set<T>().Where(predicate);
-
-            return query;
+            if (Context != null)
+                Context.Dispose();
         }
 
-        public virtual T Add(T t)
+        public virtual IQueryable<TObject> All()
         {
-            _entities.Set<T>().Add(t);
-            return t;
+            return DbSet.AsQueryable();
         }
 
-        public virtual void Delete(T t)
+        public virtual IQueryable<TObject>
+        Filter(Expression<Func<TObject, bool>> predicate)
         {
-            _entities.Set<T>().Remove(t);
+            return DbSet.Where(predicate).AsQueryable<TObject>();
         }
 
-        public virtual void Update(T t)
+        
+        public virtual IQueryable<TObject> Filter<Key>(Expression<Func<TObject, bool>> filter,out int total, int index = 0, int size = 50)
         {
-            _entities.Entry(t).State = EntityState.Modified;
+            int skipCount = index * size;
+            var _resetSet = filter != null ? DbSet.Where(filter).AsQueryable() :
+                DbSet.AsQueryable();
+            _resetSet = skipCount == 0 ? _resetSet.Take(size) :
+                _resetSet.Skip(skipCount).Take(size);
+            total = _resetSet.Count();
+            return _resetSet.AsQueryable();
+        }
+        public bool Contains(Expression<Func<TObject, bool>> predicate)
+        {
+            return DbSet.Count(predicate) > 0;
         }
 
-        #endregion
+        public virtual TObject Find(params object[] keys)
+        {
+            return DbSet.Find(keys);
+        }
+
+        public virtual TObject Find(Expression<Func<TObject, bool>> predicate)
+        {
+            return DbSet.FirstOrDefault(predicate);
+        }
+
+        public virtual TObject Create(TObject TObject)
+        {
+            var newEntry = DbSet.Add(TObject);
+            
+            return newEntry;
+        }
+
+        public virtual int Count
+        {
+            get
+            {
+                return DbSet.Count();
+            }
+        }
+
+        public virtual int Delete(TObject TObject)
+        {
+            DbSet.Remove(TObject);
+            
+            return 0;
+        }
+
+        public virtual int Update(TObject TObject)
+        {
+            var entry = Context.Entry(TObject);
+            DbSet.Attach(TObject);
+            entry.State = EntityState.Modified;
+            
+            return 0;
+        }
+        public virtual int Delete(Expression<Func<TObject, bool>> predicate)
+        {
+            var objects = Filter(predicate);
+            foreach (var obj in objects)
+                DbSet.Remove(obj);
+            
+            return 0;
+        }
+
+
+
+        
     }
 }

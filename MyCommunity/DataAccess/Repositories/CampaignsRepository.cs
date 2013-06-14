@@ -4,7 +4,7 @@ namespace MyCommunity.DataAccess.Repositories
 {
     public class CampaignsRepository : Repository<Campaign>
     {
-        public CampaignsRepository(UnitOfWork entities)
+        public CampaignsRepository(DB entities)
             : base(entities)
         {
         }

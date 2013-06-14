@@ -8,7 +8,7 @@ namespace MyCommunity.DataAccess.Repositories
 {
     public class UserMessageRepository: Repository<UserMessage>
     {
-        public UserMessageRepository(UnitOfWork entities)
+        public UserMessageRepository(DB entities)
             : base(entities)
         {
         }

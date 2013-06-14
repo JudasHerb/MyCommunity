@@ -25,7 +25,7 @@ namespace MyCommunity.Controllers
 
         public ActionResult Neighbour(int id)
         {
-            UserProfile neighbour = _unitOfWork.UsersRepository.FindBy(u => u.UserId == id).FirstOrDefault();
+            UserProfile neighbour = _unitOfWork.UsersRepository.Find(u => u.UserId == id);
 
             if (neighbour == null) return RedirectToAction("Index", "Community");
 
@@ -38,7 +38,7 @@ namespace MyCommunity.Controllers
             if (ModelState.IsValid)
             {
                 UserProfile neighbour =
-                    _unitOfWork.UsersRepository.FindBy(u => u.UserId == model.AddresseeId).FirstOrDefault();
+                    _unitOfWork.UsersRepository.Find(u => u.UserId == model.AddresseeId);
 
                 if (neighbour == null) return Json(null);
 
@@ -49,7 +49,7 @@ namespace MyCommunity.Controllers
                         Addressee = neighbour
                     };
 
-                _unitOfWork.UserMessageRepository.Add(message);
+                _unitOfWork.UserMessageRepository.Create(message);
 
                 _unitOfWork.Save();
 

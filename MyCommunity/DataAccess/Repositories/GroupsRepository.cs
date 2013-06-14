@@ -4,7 +4,7 @@ namespace MyCommunity.DataAccess.Repositories
 {
     public class GroupsRepository : Repository<Group>
     {
-        public GroupsRepository(UnitOfWork entities)
+        public GroupsRepository(DB entities)
             : base(entities)
         {
         }

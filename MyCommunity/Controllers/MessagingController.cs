@@ -18,7 +18,7 @@ namespace MyCommunity.Controllers
 
         public ActionResult Messages(int id)
         {
-            var participant = _unitOfWork.UsersRepository.FindBy(u => u.UserId == id).FirstOrDefault();
+            var participant = _unitOfWork.UsersRepository.Find(u => u.UserId == id);
             if (participant != null)
             {
 

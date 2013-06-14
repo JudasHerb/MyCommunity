@@ -20,7 +20,7 @@ namespace MyCommunity.Controllers
 
         public ActionResult Event(int id)
         {
-            Event evt = _unitOfWork.EventsRepository.FindBy(e => e.EventId == id).FirstOrDefault();
+            Event evt = _unitOfWork.EventsRepository.Find(e => e.EventId == id);
 
             if (evt == null) RedirectToAction("Index", "Community");
 
@@ -41,7 +41,7 @@ namespace MyCommunity.Controllers
         [HttpPost]
         public ActionResult Comment(string comment, int Id)
         {
-            Event evt = _unitOfWork.EventsRepository.FindBy(e => e.EventId == Id).FirstOrDefault();
+            Event evt = _unitOfWork.EventsRepository.Find(e => e.EventId == Id);
 
             if (evt == null) return Json(new {state = "Fail", additional = "Unknown Event"});
 
